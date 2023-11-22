@@ -18,6 +18,7 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	SpringArm->bUsePawnControlRotation = true;
 	SpringArm->SetRelativeLocation(FVector(0, 30, 90));
 
+	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(L"SkeletalMesh'/Game/Characters/TwinBlast/Meshes/TwinBlast_ShadowOps.TwinBlast_ShadowOps'");

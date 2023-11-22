@@ -18,6 +18,10 @@ protected :
 		float Speed;
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		float Direction;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		float AimHorizontal;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		float AimVertical;
 
 private :
 	class ACharacter* OwnerCharacter;

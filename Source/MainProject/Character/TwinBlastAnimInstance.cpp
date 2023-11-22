@@ -17,4 +17,7 @@ void UTwinBlastAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	Speed = OwnerCharacter->GetVelocity().Size2D();
 	Direction = CalculateDirection(OwnerCharacter->GetVelocity(), OwnerCharacter->GetControlRotation());
+
+	AimHorizontal = OwnerCharacter->GetBaseAimRotation().Yaw;
+	AimVertical = OwnerCharacter->GetBaseAimRotation().Pitch;
 }
