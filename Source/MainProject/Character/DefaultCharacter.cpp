@@ -17,24 +17,51 @@ ADefaultCharacter::ADefaultCharacter()
 	SpringArm->bUsePawnControlRotation = true;
 }
 
-// Called when the game starts or when spawned
 void ADefaultCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void ADefaultCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Called to bind functionality to input
 void ADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("MoveForward", this, &ADefaultCharacter::OnMoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ADefaultCharacter::OnMoveRight);
+	PlayerInputComponent->BindAxis("HorizontalLook", this, &ADefaultCharacter::OnHorizontalLook);
+	PlayerInputComponent->BindAxis("VerticalLook", this, &ADefaultCharacter::OnVerticalLook);
+}
+
+void ADefaultCharacter::OnMoveForward(float Axis)
+{
+	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
+	FVector direction = FQuat(rotator).GetForwardVector().GetSafeNormal2D();
+
+	AddMovementInput(direction, Axis);
+}
+
+void ADefaultCharacter::OnMoveRight(float Axis)
+{
+	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
+	FVector direction = FQuat(rotator).GetRightVector().GetSafeNormal2D();
+
+	AddMovementInput(direction, Axis);
+}
+
+void ADefaultCharacter::OnHorizontalLook(float Axis)
+{
+	AddControllerYawInput(Axis);
+}
+
+void ADefaultCharacter::OnVerticalLook(float Axis)
+{
+	AddControllerPitchInput(Axis);
 }
 

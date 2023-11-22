@@ -22,9 +22,15 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private :
-	UPROPERTY(VisibleAnywhere)
+	void OnMoveForward(float Axis);
+	void OnMoveRight(float Axis);
+	void OnHorizontalLook(float Axis);
+	void OnVerticalLook(float Axis);
+
+private :
+	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 };
