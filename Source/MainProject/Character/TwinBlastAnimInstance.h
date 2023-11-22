@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "DefaultCharacterAnimInstance.generated.h"
+#include "TwinBlastAnimInstance.generated.h"
 
 UCLASS()
-class MAINPROJECT_API UDefaultCharacterAnimInstance : public UAnimInstance
+class MAINPROJECT_API UTwinBlastAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 	
