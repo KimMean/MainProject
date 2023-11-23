@@ -1,5 +1,6 @@
 #include "Character/Character_TwinBlast.h"
 
+#include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
@@ -14,11 +15,12 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
 
-	SpringArm->TargetArmLength = 500.0f;
+	SpringArm->TargetArmLength = BaseArmLength;
 	SpringArm->bUsePawnControlRotation = true;
 	SpringArm->SetRelativeLocation(FVector(0, 30, 90));
 
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
+	//GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(L"SkeletalMesh'/Game/Characters/TwinBlast/Meshes/TwinBlast_ShadowOps.TwinBlast_ShadowOps'");
@@ -52,21 +54,24 @@ void ACharacter_TwinBlast::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnSprintMode);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
+
+	PlayerInputComponent->BindAction("AimMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAimMode);
+	PlayerInputComponent->BindAction("AimMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffAimMode);
 }
 
 void ACharacter_TwinBlast::OnMoveForward(float Axis)
 {
-	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
-	FVector direction = FQuat(rotator).GetForwardVector().GetSafeNormal2D();
-
+	//FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
+	//FVector direction = FQuat(rotator).GetForwardVector().GetSafeNormal2D();
+	FVector direction = UKismetMathLibrary::GetForwardVector(FRotator(0.0f, GetControlRotation().Yaw, 0.0f));
 	AddMovementInput(direction, Axis);
 }
 
 void ACharacter_TwinBlast::OnMoveRight(float Axis)
 {
-	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
-	FVector direction = FQuat(rotator).GetRightVector().GetSafeNormal2D();
-
+	//FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
+	//FVector direction = FQuat(rotator).GetRightVector().GetSafeNormal2D();
+	FVector direction = UKismetMathLibrary::GetRightVector(FRotator(0.0f, GetControlRotation().Yaw, 0.0f));
 	AddMovementInput(direction, Axis);
 }
 
@@ -93,4 +98,18 @@ void ACharacter_TwinBlast::OnJogMode()
 void ACharacter_TwinBlast::OnSprintMode()
 {
 	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+}
+
+void ACharacter_TwinBlast::OnAimMode()
+{
+	bAimMode = true;
+	//bUseControllerRotationYaw = false;
+	SpringArm->TargetArmLength = AimModeArmLength;
+}
+
+void ACharacter_TwinBlast::OffAimMode()
+{
+	bAimMode = false;
+	//bUseControllerRotationYaw = true;
+	SpringArm->TargetArmLength = BaseArmLength;
 }

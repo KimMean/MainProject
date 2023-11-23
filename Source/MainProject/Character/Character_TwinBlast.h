@@ -20,6 +20,9 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public :
+	FORCEINLINE bool GetAimMode() { return bAimMode; }
+
 private:
 	void OnMoveForward(float Axis);
 	void OnMoveRight(float Axis);
@@ -29,6 +32,9 @@ private:
 	void OnWalkMode();
 	void OnJogMode();
 	void OnSprintMode();
+
+	void OnAimMode();
+	void OffAimMode();
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -41,4 +47,9 @@ private :
 	float WalkSpeed = 200.0f;
 	float JogSpeed = 400.0f;
 	float SprintSpeed = 600.0f;
+
+	float BaseArmLength = 300.0f;
+	float AimModeArmLength = 100.0f;
+
+	bool bAimMode = false;
 };
