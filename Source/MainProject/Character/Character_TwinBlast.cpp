@@ -4,6 +4,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Blueprint/UserWidget.h"
+
+#include "Character/Widgets/MainWidget.h"
+#include "Utilities/DebugLog.h"
 
 ACharacter_TwinBlast::ACharacter_TwinBlast()
 {
@@ -28,11 +32,19 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	GetMesh()->SetSkeletalMesh(mesh.Object);
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
+
+	ConstructorHelpers::FClassFinder<UMainWidget> widget(L"WidgetBlueprint'/Game/Characters/TwinBlast/Widgets/WBP_MainWidget.WBP_MainWidget_C'");
+	MainWidgetClass = widget.Class;
+	
 }
 
 void ACharacter_TwinBlast::BeginPlay()
 {
 	Super::BeginPlay();
+
+	MainWidget = CreateWidget<UMainWidget, APlayerController>(GetController<APlayerController>(), MainWidgetClass);
+	MainWidget->AddToViewport();
+	MainWidget->Set_WBP_HPBar_Percent(0.5f);
 }
 
 void ACharacter_TwinBlast::Tick(float DeltaTime)

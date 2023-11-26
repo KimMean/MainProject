@@ -43,6 +43,11 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
+
+private :
+	class TSubclassOf<class UMainWidget> MainWidgetClass;
+	class UMainWidget* MainWidget;
+
 private :
 	float WalkSpeed = 200.0f;
 	float JogSpeed = 400.0f;
