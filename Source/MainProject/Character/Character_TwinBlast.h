@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Character/Components/StateComponent.h"
 #include "Character_TwinBlast.generated.h"
 
 UCLASS()
@@ -20,9 +21,6 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-public :
-	FORCEINLINE bool GetAimMode() { return bAimMode; }
-
 private:
 	void OnMoveForward(float Axis);
 	void OnMoveRight(float Axis);
@@ -33,8 +31,18 @@ private:
 	void OnJogMode();
 	void OnSprintMode();
 
+	void OnAvoid();
+
 	void OnAimMode();
 	void OffAimMode();
+
+private :
+	void Begin_Roll();
+	void End_Roll();
+
+private :
+	UFUNCTION()
+		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -43,18 +51,18 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UAnimationComponent* Animation;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UStatusComponent* Status;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UStateComponent* State;
+
 
 private :
 	class TSubclassOf<class UMainWidget> MainWidgetClass;
 	class UMainWidget* MainWidget;
 
-private :
-	float WalkSpeed = 200.0f;
-	float JogSpeed = 400.0f;
-	float SprintSpeed = 600.0f;
-
-	float BaseArmLength = 300.0f;
-	float AimModeArmLength = 100.0f;
-
-	bool bAimMode = false;
 };

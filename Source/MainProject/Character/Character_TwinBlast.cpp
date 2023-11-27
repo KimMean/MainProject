@@ -6,6 +6,8 @@
 #include "Camera/CameraComponent.h"
 #include "Blueprint/UserWidget.h"
 
+#include "Character/Components/AnimationComponent.h"
+#include "Character/Components/StatusComponent.h"
 #include "Character/Widgets/MainWidget.h"
 #include "Utilities/DebugLog.h"
 
@@ -16,16 +18,22 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
+	Animation = CreateDefaultSubobject<UAnimationComponent>(TEXT("Animation"));
+	Status = CreateDefaultSubobject<UStatusComponent>(TEXT("Status"));
+	State = CreateDefaultSubobject<UStateComponent>(TEXT("State"));
+
+
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
+	//Status->SetupAttachment(RootComponent);
 
-	SpringArm->TargetArmLength = BaseArmLength;
+	SpringArm->TargetArmLength = Status->GetBaseArmLength();
 	SpringArm->bUsePawnControlRotation = true;
 	SpringArm->SetRelativeLocation(FVector(0, 30, 90));
 
 	bUseControllerRotationYaw = true;
 	//GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = Status->GetRunSpeed();
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(L"SkeletalMesh'/Game/Characters/TwinBlast/Meshes/TwinBlast_ShadowOps.TwinBlast_ShadowOps'");
 	verifyf(mesh.Succeeded(), L"mesh.succeeded()");
@@ -45,6 +53,8 @@ void ACharacter_TwinBlast::BeginPlay()
 	MainWidget = CreateWidget<UMainWidget, APlayerController>(GetController<APlayerController>(), MainWidgetClass);
 	MainWidget->AddToViewport();
 	MainWidget->Set_WBP_HPBar_Percent(0.5f);
+
+	State->OnStateTypeChanged.AddDynamic(this, &ACharacter_TwinBlast::OnStateTypeChanged);
 }
 
 void ACharacter_TwinBlast::Tick(float DeltaTime)
@@ -66,6 +76,7 @@ void ACharacter_TwinBlast::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnSprintMode);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
+	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAvoid);
 
 	PlayerInputComponent->BindAction("AimMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAimMode);
 	PlayerInputComponent->BindAction("AimMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffAimMode);
@@ -99,29 +110,52 @@ void ACharacter_TwinBlast::OnVerticalLook(float Axis)
 
 void ACharacter_TwinBlast::OnWalkMode()
 {
-	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
 }
 
 void ACharacter_TwinBlast::OnJogMode()
 {
-	GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = Status->GetRunSpeed();;
 }
 
 void ACharacter_TwinBlast::OnSprintMode()
 {
-	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = Status->GetSprintSpeed();
+}
+
+void ACharacter_TwinBlast::OnAvoid()
+{
+	Animation->Play_Roll();
 }
 
 void ACharacter_TwinBlast::OnAimMode()
 {
-	bAimMode = true;
+	Status->SetAimMode(true);
 	//bUseControllerRotationYaw = false;
-	SpringArm->TargetArmLength = AimModeArmLength;
+	SpringArm->TargetArmLength = Status->GetAimModeArmLength();
 }
 
 void ACharacter_TwinBlast::OffAimMode()
 {
-	bAimMode = false;
+	Status->SetAimMode(false);
+	
 	//bUseControllerRotationYaw = true;
-	SpringArm->TargetArmLength = BaseArmLength;
+	SpringArm->TargetArmLength = Status->GetBaseArmLength();
 }
+
+void ACharacter_TwinBlast::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
+{
+	switch (InNewType)
+	{
+	case EStateType::Roll: Begin_Roll(); break;
+	}
+}
+
+void ACharacter_TwinBlast::Begin_Roll()
+{
+}
+
+void ACharacter_TwinBlast::End_Roll()
+{
+}
+
