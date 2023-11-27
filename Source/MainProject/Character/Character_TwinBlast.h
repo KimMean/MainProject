@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Character/Components/StateComponent.h"
 #include "Character_TwinBlast.generated.h"
 
 UCLASS()
@@ -30,6 +31,19 @@ private:
 	void OnJogMode();
 	void OnSprintMode();
 
+	void OnAvoid();
+
+	void OnAimMode();
+	void OffAimMode();
+
+private :
+	void Begin_Roll();
+	void End_Roll();
+
+private :
+	UFUNCTION()
+		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
+
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
@@ -37,8 +51,18 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UAnimationComponent* Animation;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UStatusComponent* Status;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UStateComponent* State;
+
+
 private :
-	float WalkSpeed = 200.0f;
-	float JogSpeed = 400.0f;
-	float SprintSpeed = 600.0f;
+	class TSubclassOf<class UMainWidget> MainWidgetClass;
+	class UMainWidget* MainWidget;
+
 };
