@@ -21,12 +21,18 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	void Begin_DoubleCombo();
+	void End_DoubleShot();
+
 private:
 	void OnMoveForward(float Axis);
 	void OnMoveRight(float Axis);
 	void OnHorizontalLook(float Axis);
 	void OnVerticalLook(float Axis);
 
+	void OnJump();
+	void OnAttack();
 	void OnWalkMode();
 	void OnJogMode();
 	void OnSprintMode();
@@ -37,8 +43,13 @@ private:
 	void OffAimMode();
 
 private :
+	void Begin_DoubleShot();
+
 	void Begin_Roll();
 	void End_Roll();
+
+
+
 
 private :
 	UFUNCTION()

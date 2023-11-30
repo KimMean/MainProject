@@ -12,14 +12,32 @@ void UStateComponent::BeginPlay()
 	
 }
 
+bool UStateComponent::IsDiveMode()
+{
+	switch (Type)
+	{
+	case EStateType::Dive_Forward:
+	case EStateType::Dive_Backward:
+	case EStateType::Dive_Left:
+	case EStateType::Dive_Right:
+		return true;
+	}
+	return false;
+}
+
 void UStateComponent::SetIdleMode()
 {
 	ChangeType(EStateType::Idle);
 }
 
-void UStateComponent::SetRollMode()
+void UStateComponent::SetAttackMode()
 {
-	ChangeType(EStateType::Roll);
+	ChangeType(EStateType::Attack);
+}
+
+void UStateComponent::SetDiveMode(EStateType InType)
+{
+	ChangeType(InType);
 }
 
 void UStateComponent::ChangeType(EStateType InType)
