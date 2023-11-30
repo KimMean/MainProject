@@ -10,7 +10,7 @@ ABullet::ABullet()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
-	SphereCollision->InitSphereRadius(15.0f);
+	SphereCollision->InitSphereRadius(5.0f);
 	RootComponent = SphereCollision;
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh> mesh(L"StaticMesh'/Engine/BasicShapes/Sphere.Sphere'");

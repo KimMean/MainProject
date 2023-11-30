@@ -47,8 +47,8 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	ConstructorHelpers::FClassFinder<UMainWidget> widget(L"WidgetBlueprint'/Game/Characters/TwinBlast/Widgets/WBP_MainWidget.WBP_MainWidget_C'");
 	MainWidgetClass = widget.Class;
 	
-	ConstructorHelpers::FObjectFinder<ABullet> bullet(L"Blueprint'/Game/Characters/TwinBlast/Bullets/BP_Bullet.BP_Bullet_C'");
-	Bullet = bullet.Object;
+	ConstructorHelpers::FClassFinder<ABullet> bullet(L"Blueprint'/Game/Characters/TwinBlast/Bullets/BP_Bullet.BP_Bullet_C'");
+	Bullet = bullet.Class;
 }
 
 void ACharacter_TwinBlast::BeginPlay()
@@ -110,10 +110,16 @@ void ACharacter_TwinBlast::BulletFiring(const USkeletalMeshSocket* socket)
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = this;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	FVector location = GetMesh()->GetSocketLocation(socket->SocketName);
 	FRotator rotator;
-	ABullet* bullet = GetWorld()->SpawnActor<ABullet>(Bullet->StaticClass(), location, rotator, SpawnParams);
+	ABullet* bullet = GetWorld()->SpawnActor<ABullet>(Bullet, location, rotator, SpawnParams);
+	if (bullet == nullptr)
+	{
+		DebugLog::Print("Error");
+		return;
+	}
 	bullet->SetDirection(Camera->GetForwardVector());
 }
 

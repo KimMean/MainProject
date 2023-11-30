@@ -79,5 +79,5 @@ private :
 	class UMainWidget* MainWidget;
 
 private :
-	class ABullet* Bullet;
+	class TSubclassOf<class ABullet> Bullet;
 };
