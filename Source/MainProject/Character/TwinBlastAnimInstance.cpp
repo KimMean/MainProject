@@ -1,6 +1,7 @@
 #include "Character/TwinBlastAnimInstance.h"
 
 #include "GameFramework/Character.h"
+#include "KismetAnimationLibrary.h"
 
 #include "Character_TwinBlast.h"
 
@@ -20,7 +21,7 @@ void UTwinBlastAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (OwnerCharacter == nullptr) return;
 
 	Speed = OwnerCharacter->GetVelocity().Size2D();
-	Direction = CalculateDirection(OwnerCharacter->GetVelocity(), OwnerCharacter->GetControlRotation());
+	Direction = UKismetAnimationLibrary::CalculateDirection(OwnerCharacter->GetVelocity(), OwnerCharacter->GetControlRotation());
 
 	//ACharacter_TwinBlast* twinBlast = Cast<ACharacter_TwinBlast>(OwnerCharacter);
 	//if (!!twinBlast)
