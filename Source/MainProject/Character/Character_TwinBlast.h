@@ -25,6 +25,8 @@ public:
 	void Begin_DoubleCombo();
 	void End_DoubleShot();
 
+	void BulletFiring(const USkeletalMeshSocket* socket);
+
 private:
 	void OnMoveForward(float Axis);
 	void OnMoveRight(float Axis);
@@ -76,4 +78,6 @@ private :
 	class TSubclassOf<class UMainWidget> MainWidgetClass;
 	class UMainWidget* MainWidget;
 
+private :
+	class ABullet* Bullet;
 };
