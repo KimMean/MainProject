@@ -72,14 +72,32 @@ void ACharacter_TwinBlast::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACharacter_TwinBlast::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACharacter_TwinBlast::OnVerticalLook);
 
+	//PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnJump);
+	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAttack);
 	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnWalkMode);
 	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnSprintMode);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
-	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAvoid);
+	//PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAvoid);
 
 	PlayerInputComponent->BindAction("AimMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAimMode);
 	PlayerInputComponent->BindAction("AimMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffAimMode);
+}
+
+void ACharacter_TwinBlast::Begin_DoubleCombo()
+{
+	if (!Status->GetComboAttack())
+		return;
+
+	DebugLog::Print("Begin_DoubleCombo");
+	Animation->Attack_DoubleShotCombo();
+}
+
+void ACharacter_TwinBlast::End_DoubleShot()
+{
+	DebugLog::Print("End_DoubleShot");
+	Status->SetComboAttack(false);
+	Status->SetAttack(false);
 }
 
 void ACharacter_TwinBlast::OnMoveForward(float Axis)
@@ -108,6 +126,31 @@ void ACharacter_TwinBlast::OnVerticalLook(float Axis)
 	AddControllerPitchInput(Axis);
 }
 
+void ACharacter_TwinBlast::OnJump()
+{
+	//if (Status->GetInAir())
+	//	return;
+	//Status->SetInAir(GetMovementComponent()->IsFalling());
+}
+
+void ACharacter_TwinBlast::OnAttack()
+{
+	if (!Status->GetAttack())
+	{
+		Begin_DoubleShot();
+		DebugLog::Print("OnAttack");
+	}
+	else
+	{
+		if (Status->GetEnableCombo())
+		{
+			Status->SetComboAttack(true);
+			DebugLog::Print("OnComboAttack");
+		}
+	}
+
+}
+
 void ACharacter_TwinBlast::OnWalkMode()
 {
 	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
@@ -125,7 +168,7 @@ void ACharacter_TwinBlast::OnSprintMode()
 
 void ACharacter_TwinBlast::OnAvoid()
 {
-	Animation->Play_Roll();
+	//Animation->Dive_Forward();
 }
 
 void ACharacter_TwinBlast::OnAimMode()
@@ -143,16 +186,27 @@ void ACharacter_TwinBlast::OffAimMode()
 	SpringArm->TargetArmLength = Status->GetBaseArmLength();
 }
 
+void ACharacter_TwinBlast::Begin_DoubleShot()
+{
+	Status->SetAttack(true);
+	Animation->Attack_DoubleShot();
+}
+
+
 void ACharacter_TwinBlast::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 {
 	switch (InNewType)
 	{
-	case EStateType::Roll: Begin_Roll(); break;
+		case EStateType::Dive_Forward: Begin_Roll(); break;
+		case EStateType::Dive_Backward: Begin_Roll(); break;
+		case EStateType::Dive_Right: Begin_Roll(); break;
+		case EStateType::Dive_Left: Begin_Roll(); break;
 	}
 }
 
 void ACharacter_TwinBlast::Begin_Roll()
 {
+	State->SetIdleMode();
 }
 
 void ACharacter_TwinBlast::End_Roll()

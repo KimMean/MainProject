@@ -38,10 +38,16 @@ protected:
 	virtual void BeginPlay() override;
 
 public :
-	void Play_Roll();
+	void Attack_DoubleShot();
+	void Attack_DoubleShotCombo();
+	void Dive_Forward();
+	void Dive_Backward();
+	void Dive_Right();
+	void Dive_Left();
 
 private :
 	void PlayAnimation(EStateType InState);
+	void PlayAnimMontage(EStateType InState);
 
 private :
 	UPROPERTY(EditDefaultsOnly, Category = "DataTable")

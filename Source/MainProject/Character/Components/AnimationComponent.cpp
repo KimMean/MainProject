@@ -17,12 +17,6 @@ void UAnimationComponent::BeginPlay()
 	TArray<FAnimationData*> datas;
 	DataTable->GetAllRows<FAnimationData>("", datas);
 
-	//for (const FAnimationData* data : datas)
-	//{
-	//	if (!!data)
-	//		DebugLog::Print(data->Animation->GetPathName());
-	//}
-
 	for (int32 i = 0; i < (int32)EStateType::Max; i++)
 	{
 		for (FAnimationData* data : datas)
@@ -38,10 +32,36 @@ void UAnimationComponent::BeginPlay()
 
 }
 
-void UAnimationComponent::Play_Roll()
+void UAnimationComponent::Attack_DoubleShot()
 {
-	PlayAnimation(EStateType::Roll);
+	PlayAnimMontage(EStateType::Attack);
 }
+
+void UAnimationComponent::Attack_DoubleShotCombo()
+{
+	PlayAnimMontage(EStateType::DoubleAttack);
+}
+
+void UAnimationComponent::Dive_Forward()
+{
+	PlayAnimMontage(EStateType::Dive_Forward);
+}
+
+void UAnimationComponent::Dive_Backward()
+{
+	PlayAnimation(EStateType::Dive_Backward);
+}
+
+void UAnimationComponent::Dive_Right()
+{
+	PlayAnimation(EStateType::Dive_Right);
+}
+
+void UAnimationComponent::Dive_Left()
+{
+	PlayAnimation(EStateType::Dive_Left);
+}
+
 
 void UAnimationComponent::PlayAnimation(EStateType InState)
 {
@@ -52,7 +72,20 @@ void UAnimationComponent::PlayAnimation(EStateType InState)
 	{
 		if (!!data->Animation)
 			character->GetMesh()->PlayAnimation(data->Animation, false);
-		DebugLog::Log("Rolllllllll");
+	}
+}
+
+void UAnimationComponent::PlayAnimMontage(EStateType InState)
+{
+	ACharacter* character = Cast<ACharacter>(GetOwner());
+	const FAnimationData* data = Datas[(int32)InState];
+	if (!!data)
+	{
+		if (!!data->Animation)
+		{
+			DebugLog::Print("aaaaaaaaaaa");
+			character->PlayAnimMontage(Cast<UAnimMontage>(data->Animation), data->PlayRatio);
+		}
 	}
 }
 
