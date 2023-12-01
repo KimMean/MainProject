@@ -6,6 +6,7 @@
 #include "Engine/Classes/GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Particles/ParticleSystem.h"
+#include "Materials/MaterialInstanceConstant.h"
 
 #include "Utilities/DebugLog.h"
 
@@ -40,6 +41,9 @@ ABullet::ABullet()
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> particle(L"ParticleSystem'/Game/ParagonTwinblast/FX/Particles/Abilities/Nitro/FX/P_TwinBlast_Nitro_NoHit.P_TwinBlast_Nitro_NoHit'");
 	ImpactParticle = particle.Object;
+
+	ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> decal(L"MaterialInstanceConstant'/Game/Characters/Bullets/BulletDecal/M_Decal_Inst.M_Decal_Inst'");
+	DecalMaterial = decal.Object;
 }
 
 void ABullet::BeginPlay()
@@ -66,6 +70,7 @@ void ABullet::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 	FRotator rotator = SweepResult.ImpactNormal.Rotation();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, SweepResult.Location, rotator);
+	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, SweepResult.Location, rotator, 10.0f);
 	Destroy();
 	//SweepResult.ImpactNormal
 }
