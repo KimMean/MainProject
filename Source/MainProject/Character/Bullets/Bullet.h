@@ -41,6 +41,13 @@ private :
 	UPROPERTY(VisibleDefaultsOnly, Category = "ImpactParticle")
 		class UParticleSystem* ImpactParticle;
 
-	class UMaterial* Material;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Decal")
+		class UMaterialInstanceConstant* DecalMaterial;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Material")
+		class UMaterial* Material;
+
+	UPROPERTY(EditAnywhere)
+		FVector DecalSize;
 
 };
