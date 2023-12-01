@@ -47,7 +47,7 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	ConstructorHelpers::FClassFinder<UMainWidget> widget(L"WidgetBlueprint'/Game/Characters/TwinBlast/Widgets/WBP_MainWidget.WBP_MainWidget_C'");
 	MainWidgetClass = widget.Class;
 	
-	ConstructorHelpers::FClassFinder<ABullet> bullet(L"Blueprint'/Game/Characters/TwinBlast/Bullets/BP_Bullet.BP_Bullet_C'");
+	ConstructorHelpers::FClassFinder<ABullet> bullet(L"Blueprint'/Game/Characters/Bullets/BP_Bullet.BP_Bullet_C'");
 	Bullet = bullet.Class;
 }
 
@@ -94,13 +94,11 @@ void ACharacter_TwinBlast::Begin_DoubleCombo()
 	if (!Status->GetComboAttack())
 		return;
 
-	DebugLog::Print("Begin_DoubleCombo");
 	Animation->Attack_DoubleShotCombo();
 }
 
 void ACharacter_TwinBlast::End_DoubleShot()
 {
-	DebugLog::Print("End_DoubleShot");
 	Status->SetComboAttack(false);
 	Status->SetAttack(false);
 }
@@ -115,11 +113,6 @@ void ACharacter_TwinBlast::BulletFiring(const USkeletalMeshSocket* socket)
 	FVector location = GetMesh()->GetSocketLocation(socket->SocketName);
 	FRotator rotator;
 	ABullet* bullet = GetWorld()->SpawnActor<ABullet>(Bullet, location, rotator, SpawnParams);
-	if (bullet == nullptr)
-	{
-		DebugLog::Print("Error");
-		return;
-	}
 	bullet->SetDirection(Camera->GetForwardVector());
 }
 
@@ -161,14 +154,12 @@ void ACharacter_TwinBlast::OnAttack()
 	if (!Status->GetAttack())
 	{
 		Begin_DoubleShot();
-		DebugLog::Print("OnAttack");
 	}
 	else
 	{
 		if (Status->GetEnableCombo())
 		{
 			Status->SetComboAttack(true);
-			DebugLog::Print("OnComboAttack");
 		}
 	}
 
