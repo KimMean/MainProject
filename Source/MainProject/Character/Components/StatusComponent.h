@@ -30,6 +30,8 @@ public :
 	FORCEINLINE float GetRunSpeed() { return RunSpeed; }
 	FORCEINLINE float GetSprintSpeed() { return SprintSpeed; }
 
+	FORCEINLINE bool GetUltimateMode() { return bUltimateMode; }
+	FORCEINLINE void SetUltimateMode(bool InUltimateMode) { bUltimateMode = InUltimateMode; }
 	FORCEINLINE bool GetAttack() { return bAttack; }
 	FORCEINLINE void SetAttack(bool InAttack) { bAttack = InAttack; }
 	FORCEINLINE bool GetComboAttack() { return bComboAttack; }
@@ -41,31 +43,33 @@ public :
 
 
 private :
-	UPROPERTY(EditDefaultsOnly, Category = "SpringArm")
+	UPROPERTY(VisibleDefaultsOnly, Category = "SpringArm")
 		float BaseArmLength = 300.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "SpringArm")
+	UPROPERTY(VisibleDefaultsOnly, Category = "SpringArm")
 		float AimModeArmLength = 100.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "AimMode")
+	UPROPERTY(VisibleDefaultsOnly, Category = "AimMode")
 		bool bAimMode = false;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Speed")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
 		bool bInAir = false;
-	UPROPERTY(EditDefaultsOnly, Category = "Speed")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
 		float WalkSpeed = 200.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Speed")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
 		float RunSpeed = 400.0f;
-	UPROPERTY(EditDefaultsOnly, Category = "Speed")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
 		float SprintSpeed = 600.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Attack")
+		bool bUltimateMode = false;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Attack")
 		bool bAttack = false;
-	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Attack")
 		bool bComboAttack = false;
-	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Attack")
 		bool bEnableCombo = false;
 
-	UPROPERTY(EditDefaultsOnly, Category = "CanMove")
+	UPROPERTY(VisibleDefaultsOnly, Category = "CanMove")
 		bool bCanMove = true;
 
 

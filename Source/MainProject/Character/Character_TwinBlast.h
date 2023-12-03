@@ -41,8 +41,14 @@ private:
 
 	void OnAvoid();
 
-	void OnAimMode();
-	void OffAimMode();
+	void OnNormalMode();
+	void OffNormalMode();
+	void OnUltimateMode();
+	void OffUltimateMode();
+	void OnChargeBlastMode();
+	void OffChargeBlastMode();
+	void OnGrenadeMode();
+	void OffGrenadeMode();
 
 private :
 	void Begin_DoubleShot();

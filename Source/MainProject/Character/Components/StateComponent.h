@@ -10,6 +10,12 @@ enum class EStateType : uint8
 	Idle,
 	Attack,
 	DoubleAttack,
+	UltimateMode,
+	Ultimate,
+	ChargeBlastMode,
+	ChargeBlast,
+	GrenadeMode,
+	Grenade,
 	Dive_Forward,
 	Dive_Backward,
 	Dive_Left,
@@ -39,6 +45,10 @@ public :
 public :
 	void SetIdleMode();
 	void SetAttackMode();
+	void SetDoubleAttackMode();
+	void SetUltimateMode();
+	void SetChargeBlastMode();
+	void SetGrenadeMode();
 	void SetDiveMode(EStateType InType);
 
 public :

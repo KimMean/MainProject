@@ -85,8 +85,12 @@ void ACharacter_TwinBlast::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
 	//PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAvoid);
 
-	PlayerInputComponent->BindAction("AimMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAimMode);
-	PlayerInputComponent->BindAction("AimMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffAimMode);
+	PlayerInputComponent->BindAction("UltimateMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnUltimateMode);
+	PlayerInputComponent->BindAction("UltimateMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffUltimateMode);
+	PlayerInputComponent->BindAction("ChargeBlastMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnChargeBlastMode);
+	PlayerInputComponent->BindAction("ChargeBlastMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffChargeBlastMode);
+	PlayerInputComponent->BindAction("GrenadeMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnGrenadeMode);
+	PlayerInputComponent->BindAction("GrenadeMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffGrenadeMode);
 }
 
 void ACharacter_TwinBlast::Begin_DoubleCombo()
@@ -109,10 +113,12 @@ void ACharacter_TwinBlast::BulletFiring(const USkeletalMeshSocket* socket)
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = this;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
 
 	FVector location = GetMesh()->GetSocketLocation(socket->SocketName);
 	FRotator rotator;
 	ABullet* bullet = GetWorld()->SpawnActor<ABullet>(Bullet, location, rotator, SpawnParams);
+	if (bullet == nullptr) return;
 	bullet->SetDirection(Camera->GetForwardVector());
 }
 
@@ -185,19 +191,48 @@ void ACharacter_TwinBlast::OnAvoid()
 	//Animation->Dive_Forward();
 }
 
-void ACharacter_TwinBlast::OnAimMode()
+void ACharacter_TwinBlast::OnNormalMode()
 {
-	Status->SetAimMode(true);
-	//bUseControllerRotationYaw = false;
-	SpringArm->TargetArmLength = Status->GetAimModeArmLength();
 }
 
-void ACharacter_TwinBlast::OffAimMode()
+void ACharacter_TwinBlast::OffNormalMode()
+{
+}
+
+void ACharacter_TwinBlast::OnUltimateMode()
+{
+	Status->SetAimMode(true);
+	Status->SetUltimateMode(true);
+
+	SpringArm->TargetArmLength = Status->GetAimModeArmLength(); 
+	Animation->Attack_UltimateMode();
+}
+
+void ACharacter_TwinBlast::OffUltimateMode()
 {
 	Status->SetAimMode(false);
-	
-	//bUseControllerRotationYaw = true;
+	Status->SetUltimateMode(false);
+
 	SpringArm->TargetArmLength = Status->GetBaseArmLength();
+}
+
+void ACharacter_TwinBlast::OnChargeBlastMode()
+{
+	Animation->Attack_ChargeBlastMode();
+}
+
+void ACharacter_TwinBlast::OffChargeBlastMode()
+{
+
+}
+
+void ACharacter_TwinBlast::OnGrenadeMode()
+{
+	Animation->Attack_GrenadeMode();
+}
+
+void ACharacter_TwinBlast::OffGrenadeMode()
+{
 }
 
 void ACharacter_TwinBlast::Begin_DoubleShot()
