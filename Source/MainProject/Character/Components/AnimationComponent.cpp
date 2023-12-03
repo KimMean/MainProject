@@ -42,6 +42,36 @@ void UAnimationComponent::Attack_DoubleShotCombo()
 	PlayAnimMontage(EStateType::DoubleAttack);
 }
 
+void UAnimationComponent::Attack_UltimateMode()
+{
+	PlayAnimMontage(EStateType::UltimateMode);
+}
+
+void UAnimationComponent::Attack_Ultimate()
+{
+	PlayAnimMontage(EStateType::Ultimate);
+}
+
+void UAnimationComponent::Attack_ChargeBlastMode()
+{
+	PlayAnimMontage(EStateType::ChargeBlastMode);
+}
+
+void UAnimationComponent::Attack_ChargeBlast()
+{
+	PlayAnimMontage(EStateType::ChargeBlast);
+}
+
+void UAnimationComponent::Attack_GrenadeMode()
+{
+	PlayAnimMontage(EStateType::GrenadeMode);
+}
+
+void UAnimationComponent::Attack_Grenade()
+{
+	PlayAnimMontage(EStateType::Grenade);
+}
+
 void UAnimationComponent::Dive_Forward()
 {
 	PlayAnimMontage(EStateType::Dive_Forward);
@@ -83,7 +113,6 @@ void UAnimationComponent::PlayAnimMontage(EStateType InState)
 	{
 		if (!!data->Animation)
 		{
-			DebugLog::Print("aaaaaaaaaaa");
 			character->PlayAnimMontage(Cast<UAnimMontage>(data->Animation), data->PlayRatio);
 		}
 	}

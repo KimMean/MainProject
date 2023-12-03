@@ -40,6 +40,12 @@ protected:
 public :
 	void Attack_DoubleShot();
 	void Attack_DoubleShotCombo();
+	void Attack_UltimateMode();
+	void Attack_Ultimate();
+	void Attack_ChargeBlastMode();
+	void Attack_ChargeBlast();
+	void Attack_GrenadeMode();
+	void Attack_Grenade();
 	void Dive_Forward();
 	void Dive_Backward();
 	void Dive_Right();

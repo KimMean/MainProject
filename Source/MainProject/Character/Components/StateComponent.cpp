@@ -35,6 +35,26 @@ void UStateComponent::SetAttackMode()
 	ChangeType(EStateType::Attack);
 }
 
+void UStateComponent::SetDoubleAttackMode()
+{
+	ChangeType(EStateType::DoubleAttack);
+}
+
+void UStateComponent::SetUltimateMode()
+{
+	ChangeType(EStateType::Ultimate);
+}
+
+void UStateComponent::SetChargeBlastMode()
+{
+	ChangeType(EStateType::ChargeBlast);
+}
+
+void UStateComponent::SetGrenadeMode()
+{
+	ChangeType(EStateType::Grenade);
+}
+
 void UStateComponent::SetDiveMode(EStateType InType)
 {
 	ChangeType(InType);
