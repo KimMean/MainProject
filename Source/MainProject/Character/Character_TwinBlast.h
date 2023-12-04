@@ -21,11 +21,15 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public :
+	class UStatusComponent* GetStatus() { return Status; }
+
 public:
 	void Begin_DoubleCombo();
 	void End_DoubleShot();
 
 	void BulletFiring(const USkeletalMeshSocket* socket);
+	void EndAttackMode();
 
 private:
 	void OnMoveForward(float Axis);
@@ -51,7 +55,10 @@ private:
 	void OffGrenadeMode();
 
 private :
-	void Begin_DoubleShot();
+	void Attack_DoubleShot();
+	void Attack_Ultimate();
+	void Attack_ChargeBlast();
+	void Attack_Grenade();
 
 	void Begin_Roll();
 	void End_Roll();
@@ -62,6 +69,9 @@ private :
 private :
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
+
+	UFUNCTION()
+		void OnActionModeChanged(EActionMode InPrevType, EActionMode InNewType);
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)

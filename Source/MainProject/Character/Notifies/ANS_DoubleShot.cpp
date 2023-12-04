@@ -9,7 +9,7 @@ FString UANS_DoubleShot::GetNotifyName_Implementation() const
 
 void UANS_DoubleShot::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
-	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 
 	UStatusComponent* Status = MeshComp->GetOwner()->FindComponentByClass<UStatusComponent>();
 
@@ -20,7 +20,7 @@ void UANS_DoubleShot::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenc
 
 void UANS_DoubleShot::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
-	Super::NotifyEnd(MeshComp, Animation);
+	Super::NotifyEnd(MeshComp, Animation, EventReference);
 
 	UStatusComponent* Status = MeshComp->GetOwner()->FindComponentByClass<UStatusComponent>();
 

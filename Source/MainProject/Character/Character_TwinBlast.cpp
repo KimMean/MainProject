@@ -60,6 +60,7 @@ void ACharacter_TwinBlast::BeginPlay()
 	MainWidget->Set_WBP_HPBar_Percent(0.5f);
 
 	State->OnStateTypeChanged.AddDynamic(this, &ACharacter_TwinBlast::OnStateTypeChanged);
+	Status->OnActionModeChanged.AddDynamic(this, &ACharacter_TwinBlast::OnActionModeChanged);
 }
 
 void ACharacter_TwinBlast::Tick(float DeltaTime)
@@ -122,6 +123,11 @@ void ACharacter_TwinBlast::BulletFiring(const USkeletalMeshSocket* socket)
 	bullet->SetDirection(Camera->GetForwardVector());
 }
 
+void ACharacter_TwinBlast::EndAttackMode()
+{
+	Status->ChangeActionMode(EActionMode::NormalMode);
+}
+
 void ACharacter_TwinBlast::OnMoveForward(float Axis)
 {
 	//FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
@@ -157,18 +163,21 @@ void ACharacter_TwinBlast::OnJump()
 
 void ACharacter_TwinBlast::OnAttack()
 {
-	if (!Status->GetAttack())
+	switch (Status->GetActionMode())
 	{
-		Begin_DoubleShot();
+		case EActionMode::NormalMode :
+			Attack_DoubleShot();
+			break;
+		case EActionMode::UltimateMode:
+			Attack_Ultimate();
+			break;
+		case EActionMode::ChargeBlastMode:
+			Attack_ChargeBlast();
+			break;
+		case EActionMode::GrenadeMode:
+			Attack_Grenade();
+			break;
 	}
-	else
-	{
-		if (Status->GetEnableCombo())
-		{
-			Status->SetComboAttack(true);
-		}
-	}
-
 }
 
 void ACharacter_TwinBlast::OnWalkMode()
@@ -193,6 +202,7 @@ void ACharacter_TwinBlast::OnAvoid()
 
 void ACharacter_TwinBlast::OnNormalMode()
 {
+	Status->ChangeActionMode(EActionMode::NormalMode);
 }
 
 void ACharacter_TwinBlast::OffNormalMode()
@@ -204,7 +214,8 @@ void ACharacter_TwinBlast::OnUltimateMode()
 	Status->SetAimMode(true);
 	Status->SetUltimateMode(true);
 
-	SpringArm->TargetArmLength = Status->GetAimModeArmLength(); 
+	SpringArm->TargetArmLength = Status->GetAimModeArmLength();
+	Status->ChangeActionMode(EActionMode::UltimateMode);
 	Animation->Attack_UltimateMode();
 }
 
@@ -219,6 +230,7 @@ void ACharacter_TwinBlast::OffUltimateMode()
 void ACharacter_TwinBlast::OnChargeBlastMode()
 {
 	Animation->Attack_ChargeBlastMode();
+	Status->ChangeActionMode(EActionMode::ChargeBlastMode);
 }
 
 void ACharacter_TwinBlast::OffChargeBlastMode()
@@ -229,16 +241,42 @@ void ACharacter_TwinBlast::OffChargeBlastMode()
 void ACharacter_TwinBlast::OnGrenadeMode()
 {
 	Animation->Attack_GrenadeMode();
+	Status->ChangeActionMode(EActionMode::GrenadeMode);
 }
 
 void ACharacter_TwinBlast::OffGrenadeMode()
 {
 }
 
-void ACharacter_TwinBlast::Begin_DoubleShot()
+void ACharacter_TwinBlast::Attack_DoubleShot()
 {
-	Status->SetAttack(true);
-	Animation->Attack_DoubleShot();
+	if (!Status->GetAttack())
+	{
+		Status->SetAttack(true);
+		Animation->Attack_DoubleShot();
+	}
+	else
+	{
+		if (Status->GetEnableCombo())
+		{
+			Status->SetComboAttack(true);
+		}
+	}
+}
+
+void ACharacter_TwinBlast::Attack_Ultimate()
+{
+	Animation->Attack_Ultimate();
+}
+
+void ACharacter_TwinBlast::Attack_ChargeBlast()
+{
+	Animation->Attack_ChargeBlast();
+}
+
+void ACharacter_TwinBlast::Attack_Grenade()
+{
+	Animation->Attack_Grenade();
 }
 
 
@@ -251,6 +289,10 @@ void ACharacter_TwinBlast::OnStateTypeChanged(EStateType InPrevType, EStateType 
 		case EStateType::Dive_Right: Begin_Roll(); break;
 		case EStateType::Dive_Left: Begin_Roll(); break;
 	}
+}
+
+void ACharacter_TwinBlast::OnActionModeChanged(EActionMode InPrevType, EActionMode InNewType)
+{
 }
 
 void ACharacter_TwinBlast::Begin_Roll()
