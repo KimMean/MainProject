@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Character/Components/StatusComponent.h"
 #include "TwinBlastAnimInstance.generated.h"
 
 UCLASS()
@@ -24,5 +25,15 @@ protected :
 		float AimVertical;
 
 private :
+	UFUNCTION()
+		void OnActionModeChanged(EActionMode InPrevType, EActionMode InNewType);
+
+protected :
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		EActionMode ActionMode;
+
+private :
 	class ACharacter* OwnerCharacter;
+	class ACharacter_TwinBlast* TwinBlast;
+
 };

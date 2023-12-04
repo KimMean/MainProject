@@ -12,6 +12,8 @@ void UTwinBlastAnimInstance::NativeBeginPlay()
 	Super::NativeBeginPlay();
 
 	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
+	TwinBlast = Cast<ACharacter_TwinBlast>(OwnerCharacter);
+	TwinBlast->GetStatus()->OnActionModeChanged.AddDynamic(this, &UTwinBlastAnimInstance::OnActionModeChanged);
 }
 
 void UTwinBlastAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -27,4 +29,9 @@ void UTwinBlastAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	AimVertical = OwnerCharacter->GetBaseAimRotation().Pitch;
 
 
+}
+
+void UTwinBlastAnimInstance::OnActionModeChanged(EActionMode InPrevType, EActionMode InNewType)
+{
+	ActionMode = InNewType;
 }

@@ -4,6 +4,17 @@
 #include "Components/ActorComponent.h"
 #include "StatusComponent.generated.h"
 
+UENUM(BlueprintType)
+enum class EActionMode : uint8
+{
+	NormalMode,
+	UltimateMode,
+	ChargeBlastMode,
+	GrenadeMode,
+	Max,
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionModeChanged, EActionMode, InPrevMode, EActionMode, InNewMode);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MAINPROJECT_API UStatusComponent : public UActorComponent
@@ -41,6 +52,15 @@ public :
 
 	FORCEINLINE bool IsCanMove() { return bCanMove; }
 
+	FORCEINLINE EActionMode GetActionMode() { return ActionMode; }
+
+public:
+	void ChangeActionMode(EActionMode InMode);
+
+public:
+	UPROPERTY(BlueprintAssignable)
+		FActionModeChanged OnActionModeChanged;
+
 
 private :
 	UPROPERTY(VisibleDefaultsOnly, Category = "SpringArm")
@@ -73,4 +93,5 @@ private :
 		bool bCanMove = true;
 
 
+	EActionMode ActionMode;
 };
