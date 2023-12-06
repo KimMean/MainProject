@@ -12,6 +12,7 @@
 #include "Character/Components/StatusComponent.h"
 #include "Character/Widgets/MainWidget.h"
 #include "Character/Bullets/Bullet.h"
+#include "Character/Bullets/Grenade.h"
 #include "Utilities/DebugLog.h"
 
 ACharacter_TwinBlast::ACharacter_TwinBlast()
@@ -49,6 +50,8 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	
 	ConstructorHelpers::FClassFinder<ABullet> bullet(L"Blueprint'/Game/Characters/Bullets/BP_Bullet.BP_Bullet_C'");
 	Bullet = bullet.Class;
+	ConstructorHelpers::FClassFinder<AGrenade> grenade(L"Blueprint'/Game/Characters/Bullets/BP_Grenade.BP_Grenade_C'");
+	Grenade = grenade.Class;
 }
 
 void ACharacter_TwinBlast::BeginPlay()
@@ -108,20 +111,51 @@ void ACharacter_TwinBlast::End_DoubleShot()
 	Status->SetAttack(false);
 }
 
-void ACharacter_TwinBlast::BulletFiring(const USkeletalMeshSocket* socket)
+void ACharacter_TwinBlast::Firing(const USkeletalMeshSocket* InSocket)
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = this;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.bDeferConstruction = true;
 	
 
-	FVector location = GetMesh()->GetSocketLocation(socket->SocketName);
+	FVector location = GetMesh()->GetSocketLocation(InSocket->SocketName);
 	FRotator rotator;
-	ABullet* bullet = GetWorld()->SpawnActor<ABullet>(Bullet, location, rotator, SpawnParams);
+	DebugLog::Print(InSocket->SocketName.ToString());
+	DebugLog::Print(location);
+	switch (Status->GetActionMode())
+	{
+	case EActionMode::NormalMode:
+	case EActionMode::UltimateMode:
+		BulletFire(location, rotator, SpawnParams);
+		break;
+	case EActionMode::ChargeBlastMode:
+		break;
+	case EActionMode::GrenadeMode:
+		GrenadeFire(location, rotator, SpawnParams);
+		break;
+	}
+}
+
+void ACharacter_TwinBlast::BulletFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam)
+{
+	ABullet* bullet = GetWorld()->SpawnActor<ABullet>(Bullet, InLocation, InRotator, InParam);
+	DebugLog::Print(bullet->GetActorLocation());
 	if (bullet == nullptr) return;
 	bullet->SetDirection(Camera->GetForwardVector());
+	bullet->FinishSpawning(bullet->GetTransform());
 }
+
+void ACharacter_TwinBlast::GrenadeFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam)
+{
+	AGrenade* grenade = GetWorld()->SpawnActor<AGrenade>(Grenade, InLocation, InRotator, InParam);
+	DebugLog::Print(grenade->GetActorLocation());
+	if (grenade == nullptr) return;
+	grenade->SetProjectileDirection(Camera->GetForwardVector());
+	grenade->FinishSpawning(grenade->GetTransform());
+}
+
 
 void ACharacter_TwinBlast::EndAttackMode()
 {

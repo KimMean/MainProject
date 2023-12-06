@@ -24,11 +24,9 @@ ABullet::ABullet()
 	StaticMesh->SetupAttachment(RootComponent);
 
 	SphereCollision->InitSphereRadius(5.0f);
-	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnBeginOverlap);
-	SphereCollision->OnComponentEndOverlap.AddDynamic(this, &ABullet::OnEndOverlap);
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> mesh(L"StaticMesh'/Engine/BasicShapes/Sphere.Sphere'");
-	StaticMesh->SetRelativeScale3D(FVector(0.1f, 0.1f, 0.1f));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> mesh(L"StaticMesh'/Game/BasicShape/Sphere.Sphere'");
+	StaticMesh->SetWorldScale3D(FVector(0.1f, 0.1f, 0.1f));
 	StaticMesh->SetStaticMesh(mesh.Object);
 
 	ProjectileMovement->SetUpdatedComponent(SphereCollision);
@@ -49,6 +47,10 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnBeginOverlap);
+	SphereCollision->OnComponentEndOverlap.AddDynamic(this, &ABullet::OnEndOverlap);
+
 	StaticMesh->SetMaterial(0, Material);
 
 }

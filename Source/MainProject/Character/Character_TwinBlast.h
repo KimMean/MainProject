@@ -28,7 +28,9 @@ public:
 	void Begin_DoubleCombo();
 	void End_DoubleShot();
 
-	void BulletFiring(const USkeletalMeshSocket* socket);
+	void Firing(const USkeletalMeshSocket* InSocket);
+	void BulletFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam);
+	void GrenadeFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam);
 	void EndAttackMode();
 
 private:
@@ -96,4 +98,5 @@ private :
 
 private :
 	class TSubclassOf<class ABullet> Bullet;
+	class TSubclassOf<class AGrenade> Grenade;
 };

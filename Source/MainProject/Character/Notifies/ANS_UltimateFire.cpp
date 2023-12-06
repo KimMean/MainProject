@@ -22,8 +22,8 @@ void UANS_UltimateFire::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequen
 	if (ElapsedTime >= FireDelay)
 	{
 		ElapsedTime -= FireDelay;
-		character->BulletFiring(MeshComp->GetSocketByName("Muzzle_01"));
-		character->BulletFiring(MeshComp->GetSocketByName("Muzzle_02"));
+		character->Firing(MeshComp->GetSocketByName("Muzzle_01"));
+		character->Firing(MeshComp->GetSocketByName("Muzzle_02"));
 	}
 
 }
