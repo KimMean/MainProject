@@ -15,6 +15,6 @@ void UAN_Fire_DoubleShot::Notify(USkeletalMeshComponent* MeshComp, UAnimSequence
 	if (character == nullptr) return;
 	
 	//character->BulletFiring(MeshComp->GetSocketByName("Muzzle_01"));
-	character->BulletFiring(MeshComp->GetSocketByName(SocketName));
+	character->Firing(MeshComp->GetSocketByName(SocketName));
 
 }
