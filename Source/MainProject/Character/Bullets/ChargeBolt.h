@@ -2,37 +2,34 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Grenade.generated.h"
+#include "ChargeBolt.generated.h"
 
 UCLASS()
-class MAINPROJECT_API AGrenade : public AActor
+class MAINPROJECT_API AChargeBolt : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	AGrenade();
+	AChargeBolt();
 
 protected:
 	virtual void BeginPlay() override;
 
-public:	
-	virtual void Tick(float DeltaTime) override;
+public:
+	void SetDirection(FVector InDirection);
 
-public :
-	void SetProjectileDirection(const FVector& InDirection);
-
-public :
+private:
 	UFUNCTION()
 		void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	UFUNCTION()
 		void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 
 private :
 	UPROPERTY(VisibleDefaultsOnly, Category = "Material")
 		class UMaterial* Material;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "ImpactParticle")
+	UPROPERTY(VisibleDefaultsOnly)
 		class UParticleSystem* ImpactParticle;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Decal")
@@ -43,14 +40,12 @@ private :
 
 private :
 	UPROPERTY(VisibleDefaultsOnly)
-		class UBoxComponent* BoxCollision;
+		class USphereComponent* SphereCollision;
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UProjectileMovementComponent* Projectile;
-
-
 
 };

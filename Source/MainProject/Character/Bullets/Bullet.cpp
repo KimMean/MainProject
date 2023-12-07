@@ -2,8 +2,7 @@
 
 #include "Kismet/GameplayStatics.h"
 
-#include "Engine/Classes/Components/SphereComponent.h"
-#include "Engine/Classes/GameFramework/ProjectileMovementComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Particles/ParticleSystem.h"
 #include "Materials/MaterialInstanceConstant.h"
@@ -68,13 +67,13 @@ void ABullet::SetDirection(FVector InDirection)
 
 void ABullet::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//DebugLog::Print(OtherActor->GetFName().ToString());
+	if (OtherActor == this) return;
+	if (OtherActor == GetOwner()) return;
 
 	FRotator rotator = SweepResult.ImpactNormal.Rotation();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, SweepResult.Location, rotator);
 	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, SweepResult.Location, rotator, 10.0f);
 	Destroy();
-	//SweepResult.ImpactNormal
 }
 
 void ABullet::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

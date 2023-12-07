@@ -12,6 +12,7 @@
 #include "Character/Components/StatusComponent.h"
 #include "Character/Widgets/MainWidget.h"
 #include "Character/Bullets/Bullet.h"
+#include "Character/Bullets/ChargeBolt.h"
 #include "Character/Bullets/Grenade.h"
 #include "Utilities/DebugLog.h"
 
@@ -50,6 +51,8 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	
 	ConstructorHelpers::FClassFinder<ABullet> bullet(L"Blueprint'/Game/Characters/Bullets/BP_Bullet.BP_Bullet_C'");
 	Bullet = bullet.Class;
+	ConstructorHelpers::FClassFinder<AChargeBolt> chargeBolt(L"Blueprint'/Game/Characters/Bullets/BP_ChargeBolt.BP_ChargeBolt_C'");
+	ChargeBolt = chargeBolt.Class;
 	ConstructorHelpers::FClassFinder<AGrenade> grenade(L"Blueprint'/Game/Characters/Bullets/BP_Grenade.BP_Grenade_C'");
 	Grenade = grenade.Class;
 }
@@ -122,8 +125,7 @@ void ACharacter_TwinBlast::Firing(const USkeletalMeshSocket* InSocket)
 
 	FVector location = GetMesh()->GetSocketLocation(InSocket->SocketName);
 	FRotator rotator;
-	DebugLog::Print(InSocket->SocketName.ToString());
-	DebugLog::Print(location);
+
 	switch (Status->GetActionMode())
 	{
 	case EActionMode::NormalMode:
@@ -131,6 +133,7 @@ void ACharacter_TwinBlast::Firing(const USkeletalMeshSocket* InSocket)
 		BulletFire(location, rotator, SpawnParams);
 		break;
 	case EActionMode::ChargeBlastMode:
+		ChargeBoltFire(location, rotator, SpawnParams);
 		break;
 	case EActionMode::GrenadeMode:
 		GrenadeFire(location, rotator, SpawnParams);
@@ -141,16 +144,22 @@ void ACharacter_TwinBlast::Firing(const USkeletalMeshSocket* InSocket)
 void ACharacter_TwinBlast::BulletFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam)
 {
 	ABullet* bullet = GetWorld()->SpawnActor<ABullet>(Bullet, InLocation, InRotator, InParam);
-	DebugLog::Print(bullet->GetActorLocation());
 	if (bullet == nullptr) return;
 	bullet->SetDirection(Camera->GetForwardVector());
 	bullet->FinishSpawning(bullet->GetTransform());
 }
 
+void ACharacter_TwinBlast::ChargeBoltFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam)
+{
+	AChargeBolt* chargeBolt = GetWorld()->SpawnActor<AChargeBolt>(ChargeBolt, InLocation, InRotator, InParam);
+	if (chargeBolt == nullptr) return;
+	chargeBolt->SetDirection(Camera->GetForwardVector());
+	chargeBolt->FinishSpawning(chargeBolt->GetTransform());
+}
+
 void ACharacter_TwinBlast::GrenadeFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam)
 {
 	AGrenade* grenade = GetWorld()->SpawnActor<AGrenade>(Grenade, InLocation, InRotator, InParam);
-	DebugLog::Print(grenade->GetActorLocation());
 	if (grenade == nullptr) return;
 	grenade->SetProjectileDirection(Camera->GetForwardVector());
 	grenade->FinishSpawning(grenade->GetTransform());
@@ -159,6 +168,9 @@ void ACharacter_TwinBlast::GrenadeFire(const FVector& InLocation, const FRotator
 
 void ACharacter_TwinBlast::EndAttackMode()
 {
+	Status->SetAttack(false);
+	Status->SetAimMode(false);
+	SpringArm->TargetArmLength = Status->GetBaseArmLength();
 	Status->ChangeActionMode(EActionMode::NormalMode);
 }
 
@@ -212,6 +224,7 @@ void ACharacter_TwinBlast::OnAttack()
 			Attack_Grenade();
 			break;
 	}
+	Status->SetAttack(true);
 }
 
 void ACharacter_TwinBlast::OnWalkMode()
@@ -245,8 +258,9 @@ void ACharacter_TwinBlast::OffNormalMode()
 
 void ACharacter_TwinBlast::OnUltimateMode()
 {
+	if (Status->GetAttack()) return;
+
 	Status->SetAimMode(true);
-	Status->SetUltimateMode(true);
 
 	SpringArm->TargetArmLength = Status->GetAimModeArmLength();
 	Status->ChangeActionMode(EActionMode::UltimateMode);
@@ -255,14 +269,12 @@ void ACharacter_TwinBlast::OnUltimateMode()
 
 void ACharacter_TwinBlast::OffUltimateMode()
 {
-	Status->SetAimMode(false);
-	Status->SetUltimateMode(false);
-
-	SpringArm->TargetArmLength = Status->GetBaseArmLength();
 }
 
 void ACharacter_TwinBlast::OnChargeBlastMode()
 {
+	if (Status->GetAttack()) return;
+
 	Animation->Attack_ChargeBlastMode();
 	Status->ChangeActionMode(EActionMode::ChargeBlastMode);
 }
@@ -274,6 +286,8 @@ void ACharacter_TwinBlast::OffChargeBlastMode()
 
 void ACharacter_TwinBlast::OnGrenadeMode()
 {
+	if (Status->GetAttack()) return;
+
 	Animation->Attack_GrenadeMode();
 	Status->ChangeActionMode(EActionMode::GrenadeMode);
 }
@@ -286,7 +300,6 @@ void ACharacter_TwinBlast::Attack_DoubleShot()
 {
 	if (!Status->GetAttack())
 	{
-		Status->SetAttack(true);
 		Animation->Attack_DoubleShot();
 	}
 	else
@@ -300,16 +313,22 @@ void ACharacter_TwinBlast::Attack_DoubleShot()
 
 void ACharacter_TwinBlast::Attack_Ultimate()
 {
+	if (Status->GetAttack()) return;
+
 	Animation->Attack_Ultimate();
 }
 
 void ACharacter_TwinBlast::Attack_ChargeBlast()
 {
+	if (Status->GetAttack()) return;
+
 	Animation->Attack_ChargeBlast();
 }
 
 void ACharacter_TwinBlast::Attack_Grenade()
 {
+	if (Status->GetAttack()) return;
+
 	Animation->Attack_Grenade();
 }
 

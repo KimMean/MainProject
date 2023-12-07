@@ -22,7 +22,7 @@ AGrenade::AGrenade()
 	RootComponent = BoxCollision;
 	StaticMesh->SetupAttachment(RootComponent);
 	
-	BoxCollision->SetWorldScale3D(FVector(0.5f, 0.3f, 0.3f));
+	BoxCollision->SetBoxExtent(FVector(50.0f, 30.0f, 30.0f));
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh> mesh(L"StaticMesh'/Game/BasicShape/Cylinder.Cylinder'");
 	StaticMesh->SetStaticMesh(mesh.Object);
@@ -33,7 +33,10 @@ AGrenade::AGrenade()
 	Projectile->InitialSpeed = 3e+3f;
 	Projectile->MaxSpeed = 3e+3f;
 
-	ConstructorHelpers::FObjectFinder<UParticleSystem> particle(L"ParticleSystem'/Game/ParagonTwinblast/FX/Particles/Abilities/VortexGrenade/FX/P_GrenadeRadial.P_GrenadeRadial'");
+	ConstructorHelpers::FObjectFinder<UMaterial> material(L"Material'/Game/Characters/Bullets/M_Grenade.M_Grenade'");
+	Material = material.Object;
+
+	ConstructorHelpers::FObjectFinder<UParticleSystem> particle(L"ParticleSystem'/Game/ParagonTwinblast/FX/Particles/Abilities/VortexGrenade/FX/P_TwinBlast_VortexGrenade_ExplodeBallistic.P_TwinBlast_VortexGrenade_ExplodeBallistic'");
 	ImpactParticle = particle.Object;
 
 	ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> decal(L"MaterialInstanceConstant'/Game/Characters/Bullets/BulletDecal/M_Decal_Inst.M_Decal_Inst'");
@@ -46,7 +49,8 @@ void AGrenade::BeginPlay()
 
 	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AGrenade::OnBeginOverlap);
 	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &AGrenade::OnEndOverlap);
-	
+
+	StaticMesh->SetMaterial(0, Material);
 }
 
 void AGrenade::Tick(float DeltaTime)
@@ -62,7 +66,9 @@ void AGrenade::SetProjectileDirection(const FVector& InDirection)
 
 void AGrenade::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	DebugLog::Print(SweepResult.GetActor()->GetName());
+	if (OtherActor == this) return;
+	if (OtherActor == GetOwner()) return;
+
 	FRotator rotator = SweepResult.ImpactNormal.Rotation();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, SweepResult.Location, rotator);
 	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, SweepResult.Location, rotator, 10.0f);

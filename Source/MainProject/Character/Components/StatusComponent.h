@@ -41,8 +41,6 @@ public :
 	FORCEINLINE float GetRunSpeed() { return RunSpeed; }
 	FORCEINLINE float GetSprintSpeed() { return SprintSpeed; }
 
-	FORCEINLINE bool GetUltimateMode() { return bUltimateMode; }
-	FORCEINLINE void SetUltimateMode(bool InUltimateMode) { bUltimateMode = InUltimateMode; }
 	FORCEINLINE bool GetAttack() { return bAttack; }
 	FORCEINLINE void SetAttack(bool InAttack) { bAttack = InAttack; }
 	FORCEINLINE bool GetComboAttack() { return bComboAttack; }
@@ -80,8 +78,6 @@ private :
 	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
 		float SprintSpeed = 600.0f;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Attack")
-		bool bUltimateMode = false;
 	UPROPERTY(VisibleDefaultsOnly, Category = "Attack")
 		bool bAttack = false;
 	UPROPERTY(VisibleDefaultsOnly, Category = "Attack")
