@@ -30,6 +30,7 @@ public:
 
 	void Firing(const USkeletalMeshSocket* InSocket);
 	void BulletFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam);
+	void ChargeBoltFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam);
 	void GrenadeFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam);
 	void EndAttackMode();
 
@@ -98,5 +99,6 @@ private :
 
 private :
 	class TSubclassOf<class ABullet> Bullet;
+	class TSubclassOf<class AChargeBolt> ChargeBolt;
 	class TSubclassOf<class AGrenade> Grenade;
 };
