@@ -3,6 +3,11 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 
+#include "Lobby/Widgets/W_OnlineServer.h"
+#include "Lobby/Widgets/W_HostServer.h"
+#include "Lobby/Widgets/W_JoinServer.h"
+#include "Lobby/Widgets/W_OptionSetting.h"
+#include "Lobby/Widgets/W_Quit.h"
 #include "Utilities/DebugLog.h"
 
 void UW_LobbyMain::NativeConstruct()
@@ -14,7 +19,12 @@ void UW_LobbyMain::NativeConstruct()
 	Btn_JoinServer->OnClicked.AddDynamic(this, &UW_LobbyMain::JoinServerButtonOnClick);
 	Btn_Option->OnClicked.AddDynamic(this, &UW_LobbyMain::OptionButtonOnClick);
 	Btn_Quit->OnClicked.AddDynamic(this, &UW_LobbyMain::QuitButtonOnClick);
-	DebugLog::Print("NativeConstruct");
+
+	WBP_OnlineServer->Btn_Cancel->OnClicked.AddDynamic(this, &UW_LobbyMain::CancelButtonOnClick);
+	WBP_HostServer->Btn_Cancel->OnClicked.AddDynamic(this, &UW_LobbyMain::CancelButtonOnClick);
+	WBP_JoinServer->Btn_Cancel->OnClicked.AddDynamic(this, &UW_LobbyMain::CancelButtonOnClick);
+	//WBP_Option->Btn_Cancel->OnClicked.AddDynamic(this, &UW_LobbyMain::CancelButtonOnClick);
+	WBP_Quit->Btn_Cancel->OnClicked.AddDynamic(this, &UW_LobbyMain::CancelButtonOnClick);
 }
 
 void UW_LobbyMain::OnlineServerButtonOnClick()
@@ -42,7 +52,7 @@ void UW_LobbyMain::QuitButtonOnClick()
 	MenuWidgetSwitch(LobbyMenu::Quit);
 }
 
-void UW_LobbyMain::HideMenuWidget()
+void UW_LobbyMain::CancelButtonOnClick()
 {
 	MenuWidgetSwitch(LobbyMenu::NONE);
 }

@@ -33,9 +33,8 @@ public :
 		void OptionButtonOnClick();
 	UFUNCTION()
 		void QuitButtonOnClick();
-
-public :
-	void HideMenuWidget();
+	UFUNCTION()
+		void CancelButtonOnClick();
 
 
 private :
@@ -54,4 +53,15 @@ private :
 		class UButton* Btn_Quit;
 	UPROPERTY(meta = (BindWidget))
 		class UWidgetSwitcher* WS_WidgetSwitcher;
+private :
+	UPROPERTY(meta = (BindWidget))
+		class UW_OnlineServer* WBP_OnlineServer;
+	UPROPERTY(meta = (BindWidget))
+		class UW_HostServer* WBP_HostServer;
+	UPROPERTY(meta = (BindWidget))
+		class UW_JoinServer* WBP_JoinServer;
+	//UPROPERTY(meta = (BindWidget))
+	//	class UW_OptionSetting* WBP_Option;
+	UPROPERTY(meta = (BindWidget))
+		class UW_Quit* WBP_Quit;
 };

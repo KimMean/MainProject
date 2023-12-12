@@ -61,9 +61,9 @@ void ACharacter_TwinBlast::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MainWidget = CreateWidget<UMainWidget, APlayerController>(GetController<APlayerController>(), MainWidgetClass);
-	MainWidget->AddToViewport();
-	MainWidget->Set_WBP_HPBar_Percent(0.5f);
+	//MainWidget = CreateWidget<UMainWidget, APlayerController>(GetController<APlayerController>(), //MainWidgetClass);
+	//MainWidget->AddToViewport();
+	//MainWidget->Set_WBP_HPBar_Percent(0.5f);
 
 	State->OnStateTypeChanged.AddDynamic(this, &ACharacter_TwinBlast::OnStateTypeChanged);
 	Status->OnActionModeChanged.AddDynamic(this, &ACharacter_TwinBlast::OnActionModeChanged);
