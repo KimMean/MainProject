@@ -2,6 +2,7 @@
 
 #include "GameFramework/Character.h"
 #include "KismetAnimationLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 #include "Character_TwinBlast.h"
 
@@ -29,6 +30,16 @@ void UTwinBlastAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	AimVertical = OwnerCharacter->GetBaseAimRotation().Pitch;
 
 
+}
+
+void UTwinBlastAnimInstance::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UTwinBlastAnimInstance, Speed);
+	DOREPLIFETIME(UTwinBlastAnimInstance, Direction);
+	DOREPLIFETIME(UTwinBlastAnimInstance, AimHorizontal);
+	DOREPLIFETIME(UTwinBlastAnimInstance, AimVertical);
 }
 
 void UTwinBlastAnimInstance::OnActionModeChanged(EActionMode InPrevType, EActionMode InNewType)
