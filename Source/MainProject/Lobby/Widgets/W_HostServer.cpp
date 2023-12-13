@@ -12,6 +12,6 @@ void UW_HostServer::NativeConstruct()
 
 void UW_HostServer::Btn_Create_OnClick()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), FName("TestLevel"));
+	UGameplayStatics::OpenLevel(GetWorld(), FName("TestLevel"), true, ((FString)(L"Listen")));
 }
 
