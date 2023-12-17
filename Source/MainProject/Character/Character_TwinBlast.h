@@ -11,7 +11,7 @@ class MAINPROJECT_API ACharacter_TwinBlast : public ACharacter
 	GENERATED_BODY()
 	
 public :
-	ACharacter_TwinBlast(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	ACharacter_TwinBlast();
 
 protected:
 	virtual void BeginPlay() override;

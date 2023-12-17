@@ -16,8 +16,7 @@
 #include "Character/Bullets/Grenade.h"
 #include "Utilities/DebugLog.h"
 
-ACharacter_TwinBlast::ACharacter_TwinBlast(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
+ACharacter_TwinBlast::ACharacter_TwinBlast()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
