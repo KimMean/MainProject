@@ -100,6 +100,11 @@ void ACharacter_TwinBlast::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("GrenadeMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffGrenadeMode);
 }
 
+FGenericTeamId ACharacter_TwinBlast::GetGenericTeamId() const
+{
+	return FGenericTeamId(TeamID);
+}
+
 void ACharacter_TwinBlast::Begin_DoubleCombo()
 {
 	if (!Status->GetComboAttack())

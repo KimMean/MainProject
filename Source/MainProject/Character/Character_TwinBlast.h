@@ -3,10 +3,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Character/Components/StateComponent.h"
+#include "GenericTeamAgentInterface.h"
 #include "Character_TwinBlast.generated.h"
 
 UCLASS()
-class MAINPROJECT_API ACharacter_TwinBlast : public ACharacter
+class MAINPROJECT_API ACharacter_TwinBlast : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 	
@@ -20,6 +21,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+public :
+	virtual FGenericTeamId GetGenericTeamId() const override;
 
 public :
 	class UStatusComponent* GetStatus() { return Status; }
@@ -101,4 +105,8 @@ private :
 	class TSubclassOf<class ABullet> Bullet;
 	class TSubclassOf<class AChargeBolt> ChargeBolt;
 	class TSubclassOf<class AGrenade> Grenade;
+
+private :
+	UPROPERTY(EditDefaultsOnly)
+		uint8 TeamID = 0;
 };
