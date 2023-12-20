@@ -1,12 +1,12 @@
 #include "Enemy/BehaviorComponent.h"
 
 #include "GameFramework/Character.h"
+#include "Character/Character_TwinBlast.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 
 UBehaviorComponent::UBehaviorComponent()
 {
-
 }
 
 void UBehaviorComponent::BeginPlay()
@@ -78,6 +78,11 @@ void UBehaviorComponent::SetAvoidMode()
 ACharacter* UBehaviorComponent::GetTargetCharacter()
 {
 	return Cast<ACharacter>(Blackboard->GetValueAsObject(PlayerKey));
+}
+
+ACharacter_TwinBlast* UBehaviorComponent::GetTargetPlayer()
+{
+	return Cast<ACharacter_TwinBlast>(Blackboard->GetValueAsObject(PlayerKey));
 }
 
 void UBehaviorComponent::ChangeType(EBehaviorType InType)

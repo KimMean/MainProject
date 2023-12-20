@@ -6,6 +6,7 @@
 
 class UBlackboardComponent;
 class ACharacter;
+class ACharacter_TwinBlast;
 
 UENUM(BlueprintType)
 enum class EBehaviorType : uint8
@@ -64,6 +65,7 @@ public :
 	void SetAvoidMode();
 
 	ACharacter* GetTargetCharacter();
+	ACharacter_TwinBlast* GetTargetPlayer();
 
 private :
 	void ChangeType(EBehaviorType InType);

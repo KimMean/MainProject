@@ -5,8 +5,11 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 
+#include "Character/Character_TwinBlast.h"
 #include "Enemy/Corpse/Corpse_AI.h"
 #include "Enemy/BehaviorComponent.h"
+
+#include "Utilities/DebugLog.h"
 
 AEnemy_AIController::AEnemy_AIController()
 {
@@ -86,10 +89,10 @@ void AEnemy_AIController::OnPerceptionUpdated(const TArray<AActor*>& UpdateActor
 	TArray<AActor*> actors;
 	PerceptionComponent->GetCurrentlyPerceivedActors(nullptr, actors);
 
-	ACorpse_AI* player = nullptr;
+	ACharacter_TwinBlast* player = nullptr;
 	for (AActor* actor : actors)
 	{
-		player = Cast<ACorpse_AI>(actor);
+		player = Cast<ACharacter_TwinBlast>(actor);
 
 		if (!!player)
 			break;
