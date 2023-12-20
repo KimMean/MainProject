@@ -10,7 +10,12 @@ public class MainProject : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
-        PublicDependencyModuleNames.Add("AnimGraphRuntime");
+        //PublicDependencyModuleNames.Add("AnimGraphRuntime");
+        PublicDependencyModuleNames.AddRange(new string[] {
+            "AnimGraphRuntime",
+            "AIModule",
+            "GameplayTasks"
+        });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
 
