@@ -15,4 +15,8 @@ public :
 
 private:
 	class ACharacter* OwnerCharacter;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		float Speed;
 };
