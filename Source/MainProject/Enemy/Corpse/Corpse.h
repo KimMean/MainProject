@@ -15,5 +15,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+private :
+	UPROPERTY(VisibleDefaultsOnly)
+		class UEnemyStateComponent* State;
 
 };
