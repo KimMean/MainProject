@@ -3,6 +3,7 @@
 #include "Enemy/AI/Enemy_AIController.h"
 #include "Enemy/Corpse/Corpse_AI.h"
 #include "Enemy/BehaviorComponent.h"
+#include "Enemy/Components/EnemyStateComponent.h"
 #include "Character/Character_TwinBlast.h"
 
 #include "Utilities/DebugLog.h"
@@ -20,19 +21,33 @@ void UBTS_Corpse::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	UBehaviorComponent* behavior = controller->FindComponentByClass<UBehaviorComponent>();
 
 	ACorpse_AI* ai = Cast<ACorpse_AI>(controller->GetPawn());
+	UEnemyStateComponent* state = ai->FindComponentByClass<UEnemyStateComponent>();
+
+	if (state->IsHittedMode())
+	{
+		behavior->SetHittedMode();
+		return;
+	}
 
 	ACharacter_TwinBlast* target = behavior->GetTargetPlayer();
 
-	DebugLog::Print("Target??");
-	if (!target) return;
-
-	DebugLog::Print("Target On");
-	float distance = ai->GetDistanceTo(target);
-	if (distance < controller->GetSightRadius())
+	if (!target)	// 플레이어가 범위안에 없음
 	{
-		DebugLog::Print("ApproachMode");
+		//PatrolMode
+		behavior->SetWaitMode();
+		return;
+	}
+
+	float distance = ai->GetDistanceTo(target);
+	if (distance < controller->GetActionRange())	// 공격상태
+	{
+		DebugLog::Print("Action Mode");
+		behavior->SetActionMode();
+		return;
+	}
+	if (distance < controller->GetSightRadius())	// 추적 상태
+	{
+		DebugLog::Print("Approach Mode");
 		behavior->SetApproachMode();
 	}
-	// state 상태 마다 
-
 }
