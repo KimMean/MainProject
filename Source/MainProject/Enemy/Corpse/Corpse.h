@@ -4,6 +4,9 @@
 #include "GameFramework/Character.h"
 #include "Corpse.generated.h"
 
+class UEnemyStateComponent;
+class UEnemyStatusComponent;
+
 UCLASS()
 class MAINPROJECT_API ACorpse : public ACharacter
 {
@@ -17,6 +20,9 @@ protected:
 
 private :
 	UPROPERTY(VisibleDefaultsOnly)
-		class UEnemyStateComponent* State;
+		UEnemyStateComponent* State;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		UEnemyStatusComponent* Status;
 
 };
