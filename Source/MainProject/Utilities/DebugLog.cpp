@@ -28,6 +28,16 @@ void DebugLog::Print(const FRotator& InValue, int32 InKey, float Duration, FColo
 	GEngine->AddOnScreenDebugMessage(InKey, Duration, InColor, InValue.ToString());
 }
 
+void DebugLog::Print(const UObject* InObject, int32 InKey, float Duration, FColor InColor)
+{
+	FString str;
+	if (!!InObject)
+		str.Append(InObject->GetName());
+
+	str.Append(!!InObject ? "Not Null" : "Null");
+	GEngine->AddOnScreenDebugMessage(InKey, Duration, InColor, str);
+}
+
 void DebugLog::Log(int32 InValue)
 {
 	UE_LOG(GameProject, Display, L"%d", InValue);
@@ -61,7 +71,6 @@ void DebugLog::Log(const UObject* InObject)
 
 	str.Append(!!InObject ? "Not Null" : "Null");
 	UE_LOG(GameProject, Display, L"%s", *str);
-
 }
 
 void DebugLog::Log(const FString& InFuncName, int32 InLineNumber)
