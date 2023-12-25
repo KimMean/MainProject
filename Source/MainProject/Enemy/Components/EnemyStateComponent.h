@@ -11,6 +11,7 @@ enum class EEnemyStateType : uint8
 	Action,
 	Hitted,
 	Stunned,
+	Death,
 	Max
 };
 

@@ -4,12 +4,14 @@
 #include "Enemy/Weapons/Enemy_Sword.h"
 #include "Enemy/Components/EnemyStateComponent.h"
 #include "Enemy/Components/EnemyStatusComponent.h"
+#include "Enemy/Components/EnemyAnimComponent.h"
 
 ACorpse::ACorpse()
 {
 
 	State = CreateDefaultSubobject<UEnemyStateComponent>(TEXT("StateComponent"));
 	Status = CreateDefaultSubobject<UEnemyStatusComponent>(TEXT("StatusComponent"));
+	Animation = CreateDefaultSubobject<UEnemyAnimComponent>(TEXT("AnimationComponent"));
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(L"SkeletalMesh'/Game/CityofBrass_Enemies/Meshes/Enemy/Corpse/Corpse_Sword.Corpse_Sword'");
 	GetMesh()->SetSkeletalMesh(mesh.Object);
