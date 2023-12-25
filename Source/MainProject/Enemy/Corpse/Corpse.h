@@ -6,6 +6,7 @@
 
 class UEnemyStateComponent;
 class UEnemyStatusComponent;
+class UEnemyAnimComponent;
 
 UCLASS()
 class MAINPROJECT_API ACorpse : public ACharacter
@@ -24,5 +25,8 @@ private :
 
 	UPROPERTY(VisibleDefaultsOnly)
 		UEnemyStatusComponent* Status;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		UEnemyAnimComponent* Animation;
 
 };
