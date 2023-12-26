@@ -2,8 +2,11 @@
 
 #include "GameFramework/Character.h"
 #include "Character/Character_TwinBlast.h"
+#include "Enemy/AI/Enemy_AIController.h"
+#include "Enemy/Corpse/Corpse.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
+#include "Utilities/DebugLog.h"
 
 UBehaviorComponent::UBehaviorComponent()
 {
@@ -12,66 +15,11 @@ UBehaviorComponent::UBehaviorComponent()
 void UBehaviorComponent::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-bool UBehaviorComponent::IsWaitMode()
-{
-	return GetType() == EBehaviorType::Wait;
-}
-
-bool UBehaviorComponent::IsApproachMode()
-{
-	return GetType() == EBehaviorType::Approach;
-}
-
-bool UBehaviorComponent::IsActionMode()
-{
-	return GetType() == EBehaviorType::Action;
-}
-
-bool UBehaviorComponent::IsPatrolMode()
-{
-	return GetType() == EBehaviorType::Patrol;
-}
-
-bool UBehaviorComponent::IsHittedMode()
-{
-	return GetType() == EBehaviorType::Hitted;
-}
-
-bool UBehaviorComponent::IsAvoidMode()
-{
-	return GetType() == EBehaviorType::Avoid;
-}
-
-void UBehaviorComponent::SetWaitMode()
-{
-	ChangeType(EBehaviorType::Wait);
-}
-
-void UBehaviorComponent::SetApproachMode()
-{
-	ChangeType(EBehaviorType::Approach);
-}
-
-void UBehaviorComponent::SetActionMode()
-{
-	ChangeType(EBehaviorType::Action);
-}
-
-void UBehaviorComponent::SetPatrolMode()
-{
-	ChangeType(EBehaviorType::Patrol);
-}
-
-void UBehaviorComponent::SetHittedMode()
-{
-	ChangeType(EBehaviorType::Hitted);
-}
-
-void UBehaviorComponent::SetAvoidMode()
-{
-	ChangeType(EBehaviorType::Avoid);
+	AEnemy_AIController* controller = Cast<AEnemy_AIController>(GetOwner());
+	ACorpse* enemy = Cast<ACorpse>(controller->GetPawn());
+	DebugLog::Print(enemy->GetName());
+	UEnemyStateComponent* state = enemy->FindComponentByClass<UEnemyStateComponent>();
+	state->OnEnemyStateTypeChanged.AddDynamic(this, &UBehaviorComponent::OnEnemyStateTypeChanged);
 }
 
 
@@ -85,18 +33,9 @@ ACharacter_TwinBlast* UBehaviorComponent::GetTargetPlayer()
 	return Cast<ACharacter_TwinBlast>(Blackboard->GetValueAsObject(PlayerKey));
 }
 
-void UBehaviorComponent::ChangeType(EBehaviorType InType)
+void UBehaviorComponent::OnEnemyStateTypeChanged(EEnemyStateType InPrevType, EEnemyStateType InNewType)
 {
-	EBehaviorType type = GetType();
-	Blackboard->SetValueAsEnum(BehaviorKey, (uint8)InType);	// 블랙보드에 상태 셋팅
-
-	if (OnBehaviorTypeChanged.IsBound())
-		OnBehaviorTypeChanged.Broadcast(type, InType);
-}
-
-EBehaviorType UBehaviorComponent::GetType()
-{
-	return (EBehaviorType)(Blackboard->GetValueAsEnum(BehaviorKey));
+	Blackboard->SetValueAsEnum(BehaviorKey, (uint8)InNewType);
 }
 
 
