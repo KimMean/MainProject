@@ -23,31 +23,23 @@ void UBTS_Corpse::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	ACorpse_AI* ai = Cast<ACorpse_AI>(controller->GetPawn());
 	UEnemyStateComponent* state = ai->FindComponentByClass<UEnemyStateComponent>();
 
-	if (state->IsHittedMode())
-	{
-		behavior->SetHittedMode();
-		return;
-	}
-
 	ACharacter_TwinBlast* target = behavior->GetTargetPlayer();
 
 	if (!target)	// 플레이어가 범위안에 없음
 	{
-		//PatrolMode
-		behavior->SetPatrolMode();
+		state->SetPatrolMode();
 		return;
 	}
 
 	float distance = ai->GetDistanceTo(target);
 	if (distance < controller->GetActionRange())	// 공격상태
 	{
-		DebugLog::Print("Action Mode");
-		behavior->SetActionMode();
+		state->SetActionMode();
 		return;
 	}
 	if (distance < controller->GetSightRadius())	// 추적 상태
 	{
-		DebugLog::Print("Approach Mode");
-		behavior->SetApproachMode();
+		state->SetApproachMode();
+		return;
 	}
 }

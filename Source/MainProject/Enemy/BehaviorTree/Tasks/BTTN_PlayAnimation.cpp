@@ -4,8 +4,11 @@
 #include "Enemy/AI/Enemy_AIController.h"
 #include "Enemy/Components/EnemyAnimComponent.h"
 
+#include "Utilities/DebugLog.h"
+
 UBTTN_PlayAnimation::UBTTN_PlayAnimation()
 {
+	bNotifyTick = true;
 	NodeName = "PlayAction";
 }
 
@@ -29,5 +32,8 @@ void UBTTN_PlayAnimation::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	UEnemyStateComponent* state = ai->FindComponentByClass<UEnemyStateComponent>();
 
 	if (state->IsIdleMode())
+	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
+
 }
