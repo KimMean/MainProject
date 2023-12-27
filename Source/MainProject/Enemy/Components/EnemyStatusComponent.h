@@ -25,10 +25,22 @@ protected:
 	virtual void BeginPlay() override;
 
 public :
+	FORCEINLINE float GetMaxHelthPoint() { return MaxHelthPoint; }
+	FORCEINLINE float GetHelthPoint() { return HelthPoint; }
+	FORCEINLINE void SetHelthPoint(float InHelthPoint) { HelthPoint = InHelthPoint; }
+
+public :
 	void SetSpeed(EEnemySpeedType InType);
 
+
 private :
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Speed")
 		float Speed[(int32)EEnemySpeedType::MAX] = { 200, 400, 600 };
-		
+	
+	UPROPERTY(VisibleDefaultsOnly, Category = "Helth")
+		float MaxHelthPoint = 100;
+
+private :
+	float HelthPoint;
+
 };

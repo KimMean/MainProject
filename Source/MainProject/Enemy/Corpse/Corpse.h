@@ -7,6 +7,7 @@
 class UEnemyStateComponent;
 class UEnemyStatusComponent;
 class UEnemyAnimComponent;
+class UWidgetComponent;
 
 UCLASS()
 class MAINPROJECT_API ACorpse : public ACharacter
@@ -18,6 +19,13 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+public :
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+private :
+	UPROPERTY(VisibleDefaultsOnly)
+		UWidgetComponent* HPWidget;
 
 private :
 	UPROPERTY(VisibleDefaultsOnly)
