@@ -10,7 +10,6 @@ UEnemyStatusComponent::UEnemyStatusComponent()
 void UEnemyStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void UEnemyStatusComponent::SetSpeed(EEnemySpeedType InType)
