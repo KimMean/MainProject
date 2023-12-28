@@ -12,6 +12,7 @@ public class MainProject : ModuleRules
 
         //PublicDependencyModuleNames.Add("AnimGraphRuntime");
         PublicDependencyModuleNames.AddRange(new string[] {
+            "UMG",
             "AnimGraphRuntime",
             "AIModule",
             "GameplayTasks"

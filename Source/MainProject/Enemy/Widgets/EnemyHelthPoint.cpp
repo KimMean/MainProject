@@ -7,7 +7,7 @@ void UEnemyHelthPoint::Set_HelthPoint_Percent(float InPercent)
 	HP_Bar->SetPercent(InPercent);
 }
 
-void UEnemyHelthPoint::Set_HelthPoint_Percent(float InHelth, float InMaxHelth)
+void UEnemyHelthPoint::Set_HelthPoint_Percent(float InCurValue, float InMaxValue)
 {
-	HP_Bar->SetPercent(InHelth / InMaxHelth);
+	HP_Bar->SetPercent(InCurValue / InMaxValue);
 }
