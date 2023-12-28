@@ -28,6 +28,7 @@ public :
 	FORCEINLINE float GetMaxHelthPoint() { return MaxHelthPoint; }
 	FORCEINLINE float GetHelthPoint() { return HelthPoint; }
 	FORCEINLINE void SetHelthPoint(float InHelthPoint) { HelthPoint = InHelthPoint; }
+	void AdjustHelthPoint(float InAdjustValue);
 
 public :
 	void SetSpeed(EEnemySpeedType InType);

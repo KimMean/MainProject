@@ -13,7 +13,7 @@ class MAINPROJECT_API UEnemyHelthPoint : public UUserWidget
 	
 public :
 	void Set_HelthPoint_Percent(float InPercent);
-	void Set_HelthPoint_Percent(float InHelth, float InMaxHelth);
+	void Set_HelthPoint_Percent(float InCurValue, float InMaxValue);
 
 protected :
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
