@@ -7,6 +7,7 @@
 #include "Enemy/Components/EnemyAnimComponent.h"
 #include "Enemy/Widgets/EnemyHelthPoint.h"
 #include "Enemy/Widgets/EnemyNameTag.h"
+#include "Abilities/DamageType/DamageBase.h"
 
 #include "Utilities/DebugLog.h"
 
@@ -73,11 +74,29 @@ float ACorpse::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	Status->AdjustHelthPoint(-DamageAmount);
-	
+
 	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHelthPoint(), Status->GetMaxHelthPoint());
 	
 	if (Status->GetHelthPoint() == 0)
 		State->SetDeathMode();
+
+	UDamageBase* damageType = Cast<UDamageBase>(DamageEvent.DamageTypeClass->GetDefaultObject());
+
+	if (damageType)
+	{
+		switch (damageType->GetDamageType())
+		{
+			case FDamageType::KnockBack :
+				State->SetHittedMode();
+				// 타겟설정
+				// 뒤로 밀려나는 애니메이션
+				// 넉백
+				float power = damageType->GetKnockBackPower();
+				DebugLog::Print(GetActorForwardVector() * 1000);
+				LaunchCharacter(GetActorForwardVector() * 1000, false, false);
+				break;
+		}
+	}
 
 	return DamageAmount;
 }

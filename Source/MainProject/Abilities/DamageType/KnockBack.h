@@ -9,6 +9,9 @@ class MAINPROJECT_API UKnockBack : public UDamageBase
 {
 	GENERATED_BODY()
 	
-private :
-	float KnockBackPower;
+public :
+	UKnockBack();
+
+public :
+	virtual float GetKnockBackPower() override;
 };
