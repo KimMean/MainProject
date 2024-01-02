@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystem.h"
 #include "Materials/MaterialInstanceConstant.h"
+#include "Abilities/DamageType/KnockBack.h"
 
 #include "Utilities/DebugLog.h"
 
@@ -38,7 +39,8 @@ AChargeBolt::AChargeBolt()
 
 	ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> decal(L"MaterialInstanceConstant'/Game/Characters/Bullets/BulletDecal/M_Decal_Inst.M_Decal_Inst'");
 	DecalMaterial = decal.Object;
-
+	ConstructorHelpers::FClassFinder<UKnockBack> damageType(L"Class'/Script/MainProject.KnockBack'");
+	DamageType = damageType.Class;
 }
 
 void AChargeBolt::BeginPlay()
@@ -65,7 +67,7 @@ void AChargeBolt::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, SweepResult.Location, rotator);
 	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, SweepResult.Location, rotator, 10.0f);
 
-	UGameplayStatics::ApplyDamage(OtherActor, 10, GetOwner()->GetInstigatorController(), this, UDamageType::StaticClass());
+	UGameplayStatics::ApplyDamage(OtherActor, 10, GetOwner()->GetInstigatorController(), this, DamageType);
 
 	Destroy();
 }

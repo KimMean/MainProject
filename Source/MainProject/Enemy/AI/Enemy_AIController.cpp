@@ -60,6 +60,11 @@ float AEnemy_AIController::GetSightRadius()
 	return Sight->SightRadius;
 }
 
+void AEnemy_AIController::SetTargetPlayer(ACharacter* character)
+{
+	Blackboard->SetValueAsObject("Player", character);
+}
+
 void AEnemy_AIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
