@@ -1,5 +1,6 @@
 #include "Enemy/AI/Enemy_AIController.h"
 
+#include "Gameframework/Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Perception/AIPerceptionComponent.h"
@@ -51,8 +52,6 @@ void AEnemy_AIController::Tick(float DeltaTime)
 	// 원을 그릴 방향까지 지정 앞에서 오른쪽으로 시계방향
 	DrawDebugCircle(GetWorld(), center, Sight->SightRadius, 300, FColor::Green, false, -1, 0, 0, FVector::RightVector, FVector::ForwardVector); 
 	DrawDebugCircle(GetWorld(), center, ActionRange, 300, FColor::Green, false, -1, 0, 0, FVector::RightVector, FVector::ForwardVector);
-
-
 }
 
 float AEnemy_AIController::GetSightRadius()
@@ -62,6 +61,7 @@ float AEnemy_AIController::GetSightRadius()
 
 void AEnemy_AIController::SetTargetPlayer(ACharacter* character)
 {
+	DebugLog::Print(GetName());
 	Blackboard->SetValueAsObject("Player", character);
 }
 
@@ -93,14 +93,14 @@ void AEnemy_AIController::OnPerceptionUpdated(const TArray<AActor*>& UpdateActor
 {
 	TArray<AActor*> actors;
 	PerceptionComponent->GetCurrentlyPerceivedActors(nullptr, actors);
-
-	ACharacter_TwinBlast* player = nullptr;
+	ACharacter* player = nullptr;
 	for (AActor* actor : actors)
 	{
-		player = Cast<ACharacter_TwinBlast>(actor);
+		player = Cast<ACharacter>(actor);
 
 		if (!!player)
 			break;
 	}
-	Blackboard->SetValueAsObject("Player", player);
+	if (!player) return;
+	SetTargetPlayer(player);
 }

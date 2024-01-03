@@ -2,6 +2,7 @@
 
 #include "Engine/StaticMesh.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -62,6 +63,7 @@ void AChargeBolt::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (OtherActor == this) return;
 	if (OtherActor == GetOwner()) return;
+	if (!Cast<ACharacter>(OtherActor)) return;
 
 	FRotator rotator = SweepResult.ImpactNormal.Rotation();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, SweepResult.Location, rotator);

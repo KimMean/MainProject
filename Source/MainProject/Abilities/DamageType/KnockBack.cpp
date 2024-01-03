@@ -5,7 +5,7 @@
 UKnockBack::UKnockBack()
 {
 	SetDamageType(FDamageType::KnockBack);
-	KnockBackPower = 10;
+	KnockBackPower = 1000;
 }
 
 float UKnockBack::GetKnockBackPower()

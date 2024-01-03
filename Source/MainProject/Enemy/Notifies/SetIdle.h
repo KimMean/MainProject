@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "EndEnemyAttack.generated.h"
+#include "SetIdle.generated.h"
 
 UCLASS()
-class MAINPROJECT_API UEndEnemyAttack : public UAnimNotify
+class MAINPROJECT_API USetIdle : public UAnimNotify
 {
 	GENERATED_BODY()
 	

@@ -14,6 +14,11 @@ class MAINPROJECT_API ACorpse_AI : public ACorpse
 public :
 	ACorpse_AI();
 
+	virtual void BeginPlay() override;
+
+public:
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 private :
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		UBehaviorTree* BehaviorTree;

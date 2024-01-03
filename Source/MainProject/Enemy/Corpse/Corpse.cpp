@@ -7,7 +7,6 @@
 #include "Enemy/Components/EnemyAnimComponent.h"
 #include "Enemy/Widgets/EnemyHelthPoint.h"
 #include "Enemy/Widgets/EnemyNameTag.h"
-#include "Abilities/DamageType/DamageBase.h"
 
 #include "Utilities/DebugLog.h"
 
@@ -45,22 +44,12 @@ void ACorpse::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Sword = GetWorld()->SpawnActor<AEnemy_Sword>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (Sword)
-	{
-		const USkeletalMeshSocket* socket = GetMesh()->GetSocketByName("SwordSocket");
-		socket->AttachActor(Sword, GetMesh());
-	}
+	SetDelegates();
+	EquipmentSword();
 
-	State->OnEnemyStateTypeChanged.AddDynamic(this, &ACorpse::OnEnemyStateTypeChanged);
+	InitStatus();
+	InitWidgets();
 
-	Status->SetHelthPoint(Status->GetMaxHelthPoint());
-
-	NameTagWidget->InitWidget();
-	HPWidget->InitWidget();
-
-	Cast<UEnemyNameTag>(NameTagWidget->GetUserWidgetObject())->SetNameTag(FText::FromString("Corpse"));
-	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHelthPoint(), Status->GetMaxHelthPoint());
 }
 
 void ACorpse::Death()
@@ -80,24 +69,6 @@ float ACorpse::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	if (Status->GetHelthPoint() == 0)
 		State->SetDeathMode();
 
-	UDamageBase* damageType = Cast<UDamageBase>(DamageEvent.DamageTypeClass->GetDefaultObject());
-
-	if (damageType)
-	{
-		switch (damageType->GetDamageType())
-		{
-			case FDamageType::KnockBack :
-				State->SetHittedMode();
-				// 타겟설정
-				// 뒤로 밀려나는 애니메이션
-				// 넉백
-				float power = damageType->GetKnockBackPower();
-				DebugLog::Print(GetActorForwardVector() * 1000);
-				LaunchCharacter(GetActorForwardVector() * 1000, false, false);
-				break;
-		}
-	}
-
 	return DamageAmount;
 }
 
@@ -116,5 +87,38 @@ void ACorpse::OnEnemyStateTypeChanged(EEnemyStateType InPrevType, EEnemyStateTyp
 	case EEnemyStateType::Max: break;
 	default: break;
 	}
+}
+
+void ACorpse::SetDelegates()
+{
+	State->OnEnemyStateTypeChanged.AddDynamic(this, &ACorpse::OnEnemyStateTypeChanged);
+}
+
+void ACorpse::InitStatus()
+{
+	Status->SetHelthPoint(Status->GetMaxHelthPoint());
+}
+
+void ACorpse::InitWidgets()
+{
+	NameTagWidget->InitWidget();
+	HPWidget->InitWidget();
+
+	Cast<UEnemyNameTag>(NameTagWidget->GetUserWidgetObject())->SetNameTag(FText::FromString("Corpse"));
+	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHelthPoint(), Status->GetMaxHelthPoint());
+}
+
+void ACorpse::EquipmentSword()
+{
+	Sword = GetWorld()->SpawnActor<AEnemy_Sword>(FVector::ZeroVector, FRotator::ZeroRotator);
+	if (Sword)
+	{
+		const USkeletalMeshSocket* socket = GetMesh()->GetSocketByName("SwordSocket");
+		socket->AttachActor(Sword, GetMesh());
+	}
+}
+
+void ACorpse::KnockBack()
+{
 }
 
