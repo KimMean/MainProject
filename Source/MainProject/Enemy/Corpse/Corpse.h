@@ -33,6 +33,15 @@ public :
 		void OnEnemyStateTypeChanged(EEnemyStateType InPrevType, EEnemyStateType InNewType);
 
 private :
+	void SetDelegates();
+	void InitStatus();
+	void InitWidgets();
+	void EquipmentSword();
+
+private :
+	void KnockBack();
+
+private :
 	UPROPERTY(VisibleDefaultsOnly)
 		UWidgetComponent* NameTagWidget;
 
@@ -43,7 +52,7 @@ private :
 	UPROPERTY(VisibleDefaultsOnly)
 		AEnemy_Sword* Sword;
 
-private :
+protected :
 	UPROPERTY(VisibleDefaultsOnly)
 		UEnemyStateComponent* State;
 
