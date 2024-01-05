@@ -30,6 +30,10 @@ public :
 	FORCEINLINE void SetHelthPoint(float InHelthPoint) { HelthPoint = InHelthPoint; }
 	void AdjustHelthPoint(float InAdjustValue);
 
+	FORCEINLINE bool GetIsHitted() { return bIsHitted; }
+	FORCEINLINE void SetIsHitted(bool InHit) { bIsHitted = InHit; }
+
+
 public :
 	void SetSpeed(EEnemySpeedType InType);
 
@@ -43,5 +47,6 @@ private :
 
 private :
 	float HelthPoint;
+	bool bIsHitted;
 
 };
