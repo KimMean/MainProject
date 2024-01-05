@@ -63,6 +63,7 @@ float ACorpse::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	Status->AdjustHelthPoint(-DamageAmount);
+	Status->SetIsHitted(true);
 
 	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHelthPoint(), Status->GetMaxHelthPoint());
 	

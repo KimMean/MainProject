@@ -9,6 +9,7 @@
 #include "Character/Character_TwinBlast.h"
 #include "Enemy/Corpse/Corpse_AI.h"
 #include "Enemy/BehaviorComponent.h"
+#include "Enemy/Components/EnemyStatusComponent.h"
 
 #include "Utilities/DebugLog.h"
 
@@ -24,7 +25,7 @@ AEnemy_AIController::AEnemy_AIController()
 	Sight->SightRadius = 600;	// 감지 범위
 	Sight->LoseSightRadius = 800;	// 벗어난 범위
 	Sight->PeripheralVisionAngleDegrees = 90;	//시야각
-	Sight->SetMaxAge(2);	// 유지
+	Sight->SetMaxAge(5);	// 유지
 
 	// TeamID에 의해 결정
 	Sight->DetectionByAffiliation.bDetectEnemies = true;	// 적
@@ -61,7 +62,6 @@ float AEnemy_AIController::GetSightRadius()
 
 void AEnemy_AIController::SetTargetPlayer(ACharacter* character)
 {
-	DebugLog::Print(GetName());
 	Blackboard->SetValueAsObject("Player", character);
 }
 
@@ -92,6 +92,8 @@ void AEnemy_AIController::OnUnPossess()
 void AEnemy_AIController::OnPerceptionUpdated(const TArray<AActor*>& UpdateActors)
 {
 	TArray<AActor*> actors;
+	UEnemyStatusComponent* status = OwnerEnemy->FindComponentByClass<UEnemyStatusComponent>();
+	if (status->GetIsHitted()) return;
 	PerceptionComponent->GetCurrentlyPerceivedActors(nullptr, actors);
 	ACharacter* player = nullptr;
 	for (AActor* actor : actors)
@@ -101,6 +103,5 @@ void AEnemy_AIController::OnPerceptionUpdated(const TArray<AActor*>& UpdateActor
 		if (!!player)
 			break;
 	}
-	if (!player) return;
 	SetTargetPlayer(player);
 }

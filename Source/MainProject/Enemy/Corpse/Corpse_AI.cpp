@@ -18,6 +18,8 @@ float ACorpse_AI::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	Cast<AEnemy_AIController>(GetController())->SetTargetPlayer(EventInstigator->GetCharacter());
+
 	UDamageBase* damageType = Cast<UDamageBase>(DamageEvent.DamageTypeClass->GetDefaultObject());
 	if (damageType)
 	{
@@ -27,12 +29,12 @@ float ACorpse_AI::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			State->SetHittedMode();
 			// 뒤로 밀려나는 애니메이션
 			// 넉백
-			Cast<AEnemy_AIController>(AIControllerClass.Get())->SetTargetPlayer(EventInstigator->GetCharacter());
 			float power = damageType->GetKnockBackPower();
 			LaunchCharacter(-GetActorForwardVector() * power, false, false);
 			break;
 		}
 	}
+
 
 	return DamageAmount;
 }
