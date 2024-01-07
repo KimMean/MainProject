@@ -61,9 +61,9 @@ void ACharacter_TwinBlast::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//MainWidget = CreateWidget<UMainWidget, APlayerController>(GetController<APlayerController>(), //MainWidgetClass);
-	//MainWidget->AddToViewport();
-	//MainWidget->Set_WBP_HPBar_Percent(0.5f);
+	MainWidget = CreateWidget<UMainWidget, APlayerController>(GetController<APlayerController>(), MainWidgetClass);
+	MainWidget->AddToViewport();
+	MainWidget->Set_WBP_HPBar_Percent(1.0f);
 
 	State->OnStateTypeChanged.AddDynamic(this, &ACharacter_TwinBlast::OnStateTypeChanged);
 	Status->OnActionModeChanged.AddDynamic(this, &ACharacter_TwinBlast::OnActionModeChanged);
@@ -98,6 +98,14 @@ void ACharacter_TwinBlast::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("ChargeBlastMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffChargeBlastMode);
 	PlayerInputComponent->BindAction("GrenadeMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnGrenadeMode);
 	PlayerInputComponent->BindAction("GrenadeMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffGrenadeMode);
+}
+
+float ACharacter_TwinBlast::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+
+	return Damage;
 }
 
 FGenericTeamId ACharacter_TwinBlast::GetGenericTeamId() const

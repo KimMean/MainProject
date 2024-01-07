@@ -40,6 +40,7 @@ AChargeBolt::AChargeBolt()
 
 	ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> decal(L"MaterialInstanceConstant'/Game/Characters/Bullets/BulletDecal/M_Decal_Inst.M_Decal_Inst'");
 	DecalMaterial = decal.Object;
+
 	ConstructorHelpers::FClassFinder<UKnockBack> damageType(L"Class'/Script/MainProject.KnockBack'");
 	DamageType = damageType.Class;
 }
@@ -69,7 +70,11 @@ void AChargeBolt::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, SweepResult.Location, rotator);
 	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, SweepResult.Location, rotator, 10.0f);
 
-	UGameplayStatics::ApplyDamage(OtherActor, 10, GetOwner()->GetInstigatorController(), this, DamageType);
+	TArray<AActor*> ignoreActors;
+	ignoreActors.Add(this);
+	ignoreActors.Add(GetOwner());
+
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), 30, GetActorLocation(), 300.0f, DamageType, ignoreActors, this, GetOwner()->GetInstigatorController(), false);
 
 	Destroy();
 }

@@ -9,6 +9,8 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Particles/ParticleSystem.h"
 
+#include "Abilities/DamageType/StunDamage.h"
+
 #include "Utilities/DebugLog.h"
 
 AGrenade::AGrenade()
@@ -41,6 +43,9 @@ AGrenade::AGrenade()
 
 	ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> decal(L"MaterialInstanceConstant'/Game/Characters/Bullets/BulletDecal/M_Decal_Inst.M_Decal_Inst'");
 	DecalMaterial = decal.Object;
+
+	ConstructorHelpers::FClassFinder<UStunDamage> damageType(L"Class'/Script/MainProject.StunDamage'");
+	DamageType = damageType.Class;
 }
 
 void AGrenade::BeginPlay()
@@ -72,6 +77,13 @@ void AGrenade::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	FRotator rotator = SweepResult.ImpactNormal.Rotation();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, SweepResult.Location, rotator);
 	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, SweepResult.Location, rotator, 10.0f);
+
+	TArray<AActor*> ignoreActors;
+	ignoreActors.Add(this);
+	ignoreActors.Add(GetOwner());
+
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), 20, GetActorLocation(), 300.0f, DamageType, ignoreActors, this, GetOwner()->GetInstigatorController(), false);
+
 	Destroy();
 }
 

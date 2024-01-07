@@ -116,6 +116,7 @@ void ACorpse::EquipmentSword()
 	{
 		const USkeletalMeshSocket* socket = GetMesh()->GetSocketByName("SwordSocket");
 		socket->AttachActor(Sword, GetMesh());
+		Sword->SetOwner(this);
 	}
 }
 

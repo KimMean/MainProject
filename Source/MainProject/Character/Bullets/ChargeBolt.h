@@ -37,6 +37,7 @@ private :
 
 	UPROPERTY(EditAnywhere)
 		FVector DecalSize;
+
 	UPROPERTY(VisibleDefaultsOnly)
 		TSubclassOf<UDamageType> DamageType;
 
