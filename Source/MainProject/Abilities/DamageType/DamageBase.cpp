@@ -14,6 +14,10 @@ FDamageType UDamageBase::GetDamageType()
 
 float UDamageBase::GetKnockBackPower()
 {
-    DebugLog::Print("UDamageBase");
     return KnockBackPower;
+}
+
+float UDamageBase::GetStunTime()
+{
+    return StunTime;
 }

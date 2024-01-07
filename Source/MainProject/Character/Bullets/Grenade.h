@@ -41,6 +41,9 @@ private :
 	UPROPERTY(EditAnywhere)
 		FVector DecalSize;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		TSubclassOf<UDamageType> DamageType;
+
 private :
 	UPROPERTY(VisibleDefaultsOnly)
 		class UBoxComponent* BoxCollision;

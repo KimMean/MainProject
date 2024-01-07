@@ -9,6 +9,7 @@ enum class FDamageType : uint8
 {
 	None,
 	KnockBack,
+	Stun,
 	Max,
 };
 
@@ -24,9 +25,11 @@ public :
 
 public :
 	virtual float GetKnockBackPower();
+	virtual float GetStunTime();
 
 protected :
 	float KnockBackPower = 0;
+	float StunTime = 0;
 
 private :
 	FDamageType DamageType;

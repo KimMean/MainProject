@@ -1,6 +1,11 @@
 #include "Enemy/Weapons/Enemy_Sword.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Gameframework/Character.h"
+
 #include "Components/BoxComponent.h"
+
+#include "Utilities/DebugLog.h"
 
 AEnemy_Sword::AEnemy_Sword()
 {
@@ -22,6 +27,23 @@ AEnemy_Sword::AEnemy_Sword()
 void AEnemy_Sword::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AEnemy_Sword::OnComponentBeginOverlap);
+	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &AEnemy_Sword::OnComponentEndOverlap);
+}
+
+void AEnemy_Sword::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor == this) return;
+	if (OtherActor == GetOwner()) return;
+
+	// 공격중일때만 해야함
+	UGameplayStatics::ApplyDamage(OtherActor, 5, GetOwner()->GetInstigatorController(), this, UDamageType::StaticClass());
+	
+}
+
+void AEnemy_Sword::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
 }
 
 
