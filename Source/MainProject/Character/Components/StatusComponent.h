@@ -52,6 +52,11 @@ public :
 
 	FORCEINLINE EActionMode GetActionMode() { return ActionMode; }
 
+public :
+	float GetMaxHealthPoint();
+	float GetCurHealthPoint();
+	void AdjustHealthPoint(float InAdjustValue);
+
 public:
 	void ChangeActionMode(EActionMode InMode);
 
@@ -88,6 +93,10 @@ private :
 	UPROPERTY(VisibleDefaultsOnly, Category = "CanMove")
 		bool bCanMove = true;
 
+	UPROPERTY(VisibleDefaultsOnly, Category = "Health")
+		float MaxHealth;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Health")
+		float CurHealth;
 
 	EActionMode ActionMode;
 };

@@ -25,10 +25,10 @@ protected:
 	virtual void BeginPlay() override;
 
 public :
-	FORCEINLINE float GetMaxHelthPoint() { return MaxHelthPoint; }
-	FORCEINLINE float GetHelthPoint() { return HelthPoint; }
-	FORCEINLINE void SetHelthPoint(float InHelthPoint) { HelthPoint = InHelthPoint; }
-	void AdjustHelthPoint(float InAdjustValue);
+	FORCEINLINE float GetMaxHealthPoint() { return MaxHealthPoint; }
+	FORCEINLINE float GetHealthPoint() { return HealthPoint; }
+	FORCEINLINE void SetHealthPoint(float InHealthPoint) { HealthPoint = InHealthPoint; }
+	void AdjustHealthPoint(float InAdjustValue);
 
 	FORCEINLINE bool GetIsHitted() { return bIsHitted; }
 	FORCEINLINE void SetIsHitted(bool InHit) { bIsHitted = InHit; }
@@ -43,10 +43,10 @@ private :
 		float Speed[(int32)EEnemySpeedType::MAX] = { 200, 400, 600 };
 	
 	UPROPERTY(VisibleDefaultsOnly, Category = "Helth")
-		float MaxHelthPoint = 100;
+		float MaxHealthPoint = 100;
 
 private :
-	float HelthPoint;
+	float HealthPoint;
 	bool bIsHitted;
 
 };

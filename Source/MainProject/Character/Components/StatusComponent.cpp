@@ -2,13 +2,35 @@
 
 UStatusComponent::UStatusComponent()
 {
-
+	MaxHealth = 100;
+	CurHealth = MaxHealth;
 }
 
 
 void UStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+float UStatusComponent::GetMaxHealthPoint()
+{
+	return MaxHealth;
+}
+
+float UStatusComponent::GetCurHealthPoint()
+{
+	return CurHealth;
+}
+
+void UStatusComponent::AdjustHealthPoint(float InAdjustValue)
+{
+	CurHealth += InAdjustValue;
+
+	if (CurHealth <= 0)
+		CurHealth = 0;
+
+	if (CurHealth > GetMaxHealthPoint())
+		CurHealth = GetMaxHealthPoint();
 }
 
 void UStatusComponent::ChangeActionMode(EActionMode InMode)

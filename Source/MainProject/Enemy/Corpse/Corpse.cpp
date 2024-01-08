@@ -2,6 +2,8 @@
 
 #include "Engine/SkeletalMeshSocket.h"
 #include "Components/WidgetComponent.h"
+#include "Components/CapsuleComponent.h"
+
 #include "Enemy/Weapons/Enemy_Sword.h"
 #include "Enemy/Components/EnemyStatusComponent.h"
 #include "Enemy/Components/EnemyAnimComponent.h"
@@ -12,6 +14,7 @@
 
 ACorpse::ACorpse()
 {
+	Tags.Add(FName("Enemy"));
 
 	State = CreateDefaultSubobject<UEnemyStateComponent>(TEXT("StateComponent"));
 	Status = CreateDefaultSubobject<UEnemyStatusComponent>(TEXT("StatusComponent"));
@@ -25,6 +28,8 @@ ACorpse::ACorpse()
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(L"SkeletalMesh'/Game/CityofBrass_Enemies/Meshes/Enemy/Corpse/Corpse_Sword.Corpse_Sword'");
 	GetMesh()->SetSkeletalMesh(mesh.Object);
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
+
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 
 	ConstructorHelpers::FClassFinder<UEnemyNameTag> nameWidget(L"WidgetBlueprint'/Game/Enemies/Widgets/WB_EnemyNameTag.WB_EnemyNameTag_C'");
 	NameTagWidget->SetWidgetClass(nameWidget.Class);
@@ -62,15 +67,20 @@ float ACorpse::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	Status->AdjustHelthPoint(-DamageAmount);
+	Status->AdjustHealthPoint(-DamageAmount);
 	Status->SetIsHitted(true);
 
-	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHelthPoint(), Status->GetMaxHelthPoint());
+	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHealthPoint(), Status->GetMaxHealthPoint());
 	
-	if (Status->GetHelthPoint() == 0)
+	if (Status->GetHealthPoint() == 0)
 		State->SetDeathMode();
 
 	return DamageAmount;
+}
+
+UEnemyStateComponent* ACorpse::GetStateComponent()
+{
+	return State;
 }
 
 void ACorpse::OnEnemyStateTypeChanged(EEnemyStateType InPrevType, EEnemyStateType InNewType)
@@ -97,7 +107,7 @@ void ACorpse::SetDelegates()
 
 void ACorpse::InitStatus()
 {
-	Status->SetHelthPoint(Status->GetMaxHelthPoint());
+	Status->SetHealthPoint(Status->GetMaxHealthPoint());
 }
 
 void ACorpse::InitWidgets()
@@ -106,7 +116,7 @@ void ACorpse::InitWidgets()
 	HPWidget->InitWidget();
 
 	Cast<UEnemyNameTag>(NameTagWidget->GetUserWidgetObject())->SetNameTag(FText::FromString("Corpse"));
-	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHelthPoint(), Status->GetMaxHelthPoint());
+	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHealthPoint(), Status->GetMaxHealthPoint());
 }
 
 void ACorpse::EquipmentSword()
