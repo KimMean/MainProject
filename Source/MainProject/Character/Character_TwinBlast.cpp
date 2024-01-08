@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/CapsuleComponent.h"
 
 #include "Character/Components/AnimationComponent.h"
 #include "Character/Components/StatusComponent.h"
@@ -19,6 +20,7 @@
 ACharacter_TwinBlast::ACharacter_TwinBlast()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	Tags.Add("Player");
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -27,10 +29,10 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	Status = CreateDefaultSubobject<UStatusComponent>(TEXT("Status"));
 	State = CreateDefaultSubobject<UStateComponent>(TEXT("State"));
 
-
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
-	//Status->SetupAttachment(RootComponent);
+
+	GetCapsuleComponent()->SetCollisionProfileName("Player");
 
 	SpringArm->TargetArmLength = Status->GetBaseArmLength();
 	SpringArm->bUsePawnControlRotation = true;
@@ -104,6 +106,9 @@ float ACharacter_TwinBlast::TakeDamage(float Damage, FDamageEvent const& DamageE
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
+	Status->AdjustHealthPoint(-Damage);
+	float hpRatio = Status->GetCurHealthPoint() / Status->GetMaxHealthPoint();
+	MainWidget->Set_WBP_HPBar_Percent(hpRatio);
 
 	return Damage;
 }

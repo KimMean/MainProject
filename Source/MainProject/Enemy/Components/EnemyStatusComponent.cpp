@@ -12,15 +12,15 @@ void UEnemyStatusComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-void UEnemyStatusComponent::AdjustHelthPoint(float InAdjustValue)
+void UEnemyStatusComponent::AdjustHealthPoint(float InAdjustValue)
 {
-	HelthPoint += InAdjustValue;
+	HealthPoint += InAdjustValue;
 
-	if (HelthPoint <= 0)
-		HelthPoint = 0;
+	if (HealthPoint <= 0)
+		HealthPoint = 0;
 
-	if (HelthPoint > GetMaxHelthPoint())
-		HelthPoint = GetMaxHelthPoint();
+	if (HealthPoint > GetMaxHealthPoint())
+		HealthPoint = GetMaxHealthPoint();
 }
 
 void UEnemyStatusComponent::SetSpeed(EEnemySpeedType InType)

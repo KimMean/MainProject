@@ -2,13 +2,17 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "Gameframework/Character.h"
-
 #include "Components/BoxComponent.h"
+
+#include "Enemy/Corpse/Corpse.h"
+#include "Enemy/Components/EnemyStateComponent.h"
 
 #include "Utilities/DebugLog.h"
 
 AEnemy_Sword::AEnemy_Sword()
 {
+	Tags.Add("Weapon");
+
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
@@ -21,6 +25,7 @@ AEnemy_Sword::AEnemy_Sword()
 
 	BoxCollision->SetBoxExtent(FVector(35.0f, 10.0f, 3.0f));
 	BoxCollision->SetRelativeLocation(FVector(50.0f, -5.0f, 0.0f));
+	BoxCollision->SetCollisionProfileName(TEXT("Weapon"));
 	
 }
 
@@ -36,10 +41,10 @@ void AEnemy_Sword::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompon
 {
 	if (OtherActor == this) return;
 	if (OtherActor == GetOwner()) return;
+	if (OtherActor->ActorHasTag("Enemy")) return;
+	if (!Cast<ACorpse>(GetOwner())->GetStateComponent()->IsActionMode()) return;
 
-	// 공격중일때만 해야함
 	UGameplayStatics::ApplyDamage(OtherActor, 5, GetOwner()->GetInstigatorController(), this, UDamageType::StaticClass());
-	
 }
 
 void AEnemy_Sword::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
