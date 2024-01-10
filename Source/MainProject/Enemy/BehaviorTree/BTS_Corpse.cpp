@@ -1,7 +1,7 @@
 #include "Enemy/BehaviorTree/BTS_Corpse.h"
 
 #include "Enemy/AI/Enemy_AIController.h"
-#include "Enemy/Corpse/Corpse_AI.h"
+#include "Enemy/EnemyBase.h"
 #include "Enemy/BehaviorComponent.h"
 #include "Enemy/Components/EnemyStateComponent.h"
 #include "Enemy/Components/EnemyStatusComponent.h"
@@ -21,7 +21,7 @@ void UBTS_Corpse::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	AEnemy_AIController* controller = Cast<AEnemy_AIController>(OwnerComp.GetOwner());
 	UBehaviorComponent* behavior = controller->FindComponentByClass<UBehaviorComponent>();
 	
-	ACorpse_AI* ai = Cast<ACorpse_AI>(controller->GetPawn());
+	AEnemyBase* ai = Cast<AEnemyBase>(controller->GetPawn());
 	UEnemyStateComponent* state = ai->FindComponentByClass<UEnemyStateComponent>();
 	UEnemyStatusComponent* status = ai->FindComponentByClass<UEnemyStatusComponent>();
 	

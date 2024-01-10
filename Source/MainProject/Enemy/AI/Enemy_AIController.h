@@ -6,7 +6,7 @@
 
 class UAIPerceptionComponent;
 class UAISenseConfig_Sight;
-class ACorpse_AI;
+class AEnemyBase;
 
 class UBehaviorComponent;
 
@@ -41,7 +41,7 @@ private:
 		UBehaviorComponent* Behavior;
 
 private :
-	ACorpse_AI* OwnerEnemy;
+	AEnemyBase* OwnerEnemy;
 	UAISenseConfig_Sight* Sight;	// 감지 클래스
 
 private:

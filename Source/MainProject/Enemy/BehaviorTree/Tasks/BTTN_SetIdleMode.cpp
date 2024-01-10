@@ -1,7 +1,7 @@
 #include "Enemy/BehaviorTree/Tasks/BTTN_SetIdleMode.h"
 
 #include "Enemy/BehaviorComponent.h"
-#include "Enemy/Corpse/Corpse.h"
+#include "Enemy/EnemyBase.h"
 #include "Enemy/AI/Enemy_AIController.h"
 #include "Enemy/Components/EnemyStateComponent.h"
 
@@ -15,7 +15,7 @@ EBTNodeResult::Type UBTTN_SetIdleMode::ExecuteTask(UBehaviorTreeComponent& Owner
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	AEnemy_AIController* controller = Cast<AEnemy_AIController>(OwnerComp.GetOwner());
-	ACorpse* enemy = Cast<ACorpse>(controller->GetPawn());
+	AEnemyBase* enemy = Cast<AEnemyBase>(controller->GetPawn());
 	UEnemyStateComponent* state = enemy->FindComponentByClass<UEnemyStateComponent>();
 
 	state->SetIdleMode();

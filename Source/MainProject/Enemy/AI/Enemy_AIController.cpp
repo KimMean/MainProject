@@ -7,7 +7,7 @@
 #include "Perception/AISenseConfig_Sight.h"
 
 #include "Character/Character_TwinBlast.h"
-#include "Enemy/Corpse/Corpse_AI.h"
+#include "Enemy/EnemyBase.h"
 #include "Enemy/BehaviorComponent.h"
 #include "Enemy/Components/EnemyStatusComponent.h"
 
@@ -69,7 +69,7 @@ void AEnemy_AIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 	// 빙의시
-	OwnerEnemy = Cast<ACorpse_AI>(InPawn);
+	OwnerEnemy = Cast<AEnemyBase>(InPawn);
 	SetGenericTeamId(OwnerEnemy->GetTeamID());	// 중립은 255의 값을 가지고 있다. 같으면 프렌들리
 
 	PerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &AEnemy_AIController::OnPerceptionUpdated);

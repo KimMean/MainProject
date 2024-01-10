@@ -3,7 +3,7 @@
 #include "GameFramework/Character.h"
 #include "Character/Character_TwinBlast.h"
 #include "Enemy/AI/Enemy_AIController.h"
-#include "Enemy/Corpse/Corpse.h"
+#include "Enemy/EnemyBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 #include "Utilities/DebugLog.h"
@@ -16,8 +16,7 @@ void UBehaviorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	AEnemy_AIController* controller = Cast<AEnemy_AIController>(GetOwner());
-	ACorpse* enemy = Cast<ACorpse>(controller->GetPawn());
-	DebugLog::Print(enemy->GetName());
+	AEnemyBase* enemy = Cast<AEnemyBase>(controller->GetPawn());
 	UEnemyStateComponent* state = enemy->FindComponentByClass<UEnemyStateComponent>();
 	state->OnEnemyStateTypeChanged.AddDynamic(this, &UBehaviorComponent::OnEnemyStateTypeChanged);
 }
