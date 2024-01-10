@@ -1,6 +1,6 @@
 #include "Enemy/Notifies/EnemyDeath.h"
 
-#include "Enemy/Corpse/Corpse.h"
+#include "Enemy/EnemyBase.h"
 
 #include "Utilities/DebugLog.h"
 FString UEnemyDeath::GetNotifyName_Implementation() const
@@ -13,7 +13,7 @@ void UEnemyDeath::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* An
 	if (MeshComp->GetWorld()->WorldType == EWorldType::Type::EditorPreview)
 		return;
 
-	ACorpse* enemy = Cast<ACorpse>(MeshComp->GetOwner());
+	AEnemyBase* enemy = Cast<AEnemyBase>(MeshComp->GetOwner());
 
 	enemy->Death();
 }

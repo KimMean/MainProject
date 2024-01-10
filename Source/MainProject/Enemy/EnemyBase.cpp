@@ -10,6 +10,7 @@
 #include "Enemy/Widgets/EnemyHelthPoint.h"
 #include "Enemy/Widgets/EnemyNameTag.h"
 
+#include "Utilities/DebugLog.h"
 AEnemyBase::AEnemyBase()
 {
 	PrimaryActorTick.bCanEverTick = true;

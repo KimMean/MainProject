@@ -1,6 +1,6 @@
 #include "Enemy/Components/EnemyAnimComponent.h"
 
-#include "GameFramework/Character.h"
+#include "Enemy/EnemyBase.h"
 #include "Enemy/Datas/EnemyAnimDatas.h"
 
 UEnemyAnimComponent::UEnemyAnimComponent()
@@ -37,7 +37,7 @@ void UEnemyAnimComponent::Death()
 
 void UEnemyAnimComponent::PlayAnimMontage(EEnemyStateType InState)
 {
-	ACharacter* character = Cast<ACharacter>(GetOwner());
+	AEnemyBase* character = Cast<AEnemyBase>(GetOwner());
 
 	if (!AnimDatas) return;
 
