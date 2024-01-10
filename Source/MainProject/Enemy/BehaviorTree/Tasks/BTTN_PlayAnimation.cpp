@@ -1,6 +1,6 @@
 #include "Enemy/BehaviorTree/Tasks/BTTN_PlayAnimation.h"
 
-#include "Enemy/Corpse/Corpse_AI.h"
+#include "Enemy/EnemyBase.h"
 #include "Enemy/AI/Enemy_AIController.h"
 #include "Enemy/Components/EnemyAnimComponent.h"
 
@@ -17,8 +17,8 @@ EBTNodeResult::Type UBTTN_PlayAnimation::ExecuteTask(UBehaviorTreeComponent& Own
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	AEnemy_AIController* controller = Cast<AEnemy_AIController>(OwnerComp.GetOwner());
-	ACorpse_AI* ai = Cast<ACorpse_AI>(controller->GetPawn());
-	UEnemyAnimComponent* animation = ai->FindComponentByClass<UEnemyAnimComponent>();
+	AEnemyBase* enemy = Cast<AEnemyBase>(controller->GetPawn());
+	UEnemyAnimComponent* animation = enemy->FindComponentByClass<UEnemyAnimComponent>();
 
 	animation->PlayAnimMontage(StateType);
 
@@ -28,8 +28,8 @@ EBTNodeResult::Type UBTTN_PlayAnimation::ExecuteTask(UBehaviorTreeComponent& Own
 void UBTTN_PlayAnimation::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	AEnemy_AIController* controller = Cast<AEnemy_AIController>(OwnerComp.GetOwner());
-	ACorpse_AI* ai = Cast<ACorpse_AI>(controller->GetPawn());
-	UEnemyStateComponent* state = ai->FindComponentByClass<UEnemyStateComponent>();
+	AEnemyBase* enemy = Cast<AEnemyBase>(controller->GetPawn());
+	UEnemyStateComponent* state = enemy->FindComponentByClass<UEnemyStateComponent>();
 
 	if (state->IsIdleMode())
 	{

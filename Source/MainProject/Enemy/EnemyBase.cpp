@@ -1,20 +1,16 @@
-#include "Enemy/Corpse/Corpse.h"
+#include "Enemy/EnemyBase.h"
 
-#include "Engine/SkeletalMeshSocket.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/WidgetComponent.h"
 #include "Components/CapsuleComponent.h"
 
-#include "Enemy/Weapons/Enemy_Sword.h"
 #include "Enemy/Components/EnemyStatusComponent.h"
 #include "Enemy/Components/EnemyAnimComponent.h"
 #include "Enemy/Widgets/EnemyHelthPoint.h"
 #include "Enemy/Widgets/EnemyNameTag.h"
 
-#include "Utilities/DebugLog.h"
-
-ACorpse::ACorpse()
+AEnemyBase::AEnemyBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -29,11 +25,8 @@ ACorpse::ACorpse()
 	NameTagWidget->SetupAttachment(GetMesh());
 	HPWidget->SetupAttachment(GetMesh());
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(L"SkeletalMesh'/Game/CityofBrass_Enemies/Meshes/Enemy/Corpse_Basic/Corpse_Basic.Corpse_Basic'");
-	GetMesh()->SetSkeletalMesh(mesh.Object);
-	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
-
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 
 	ConstructorHelpers::FClassFinder<UEnemyNameTag> nameWidget(L"WidgetBlueprint'/Game/Enemies/Widgets/WB_EnemyNameTag.WB_EnemyNameTag_C'");
 	NameTagWidget->SetWidgetClass(nameWidget.Class);
@@ -46,23 +39,19 @@ ACorpse::ACorpse()
 	HPWidget->SetWidgetSpace(EWidgetSpace::World);
 	HPWidget->SetRelativeLocation(FVector(0, 0, 220));
 	HPWidget->SetDrawSize(FVector2D(150, 15));
-
 }
 
-void ACorpse::BeginPlay()
+void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	SetDelegates();
-	EquipmentSword();
 
 	InitStatus();
 	InitWidgets();
 }
 
-void ACorpse::Tick(float DeltaSeconds)
+void AEnemyBase::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaTime);
 
 	FVector cameraLocation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetTransform().GetLocation();
 
@@ -74,83 +63,52 @@ void ACorpse::Tick(float DeltaSeconds)
 
 	HPWidget->SetWorldRotation(hpRotator);
 	NameTagWidget->SetWorldRotation(nameRotator);
-	
 }
 
-void ACorpse::Death()
+float AEnemyBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	Sword->Destroy();
-	Destroy();
-}
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-float ACorpse::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	Status->AdjustHealthPoint(-DamageAmount);
+	Status->AdjustHealthPoint(-Damage);
 	Status->SetIsHitted(true);
 
-	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHealthPoint(), Status->GetMaxHealthPoint());
-	
+	UpdateHealthPoint();
+
 	if (Status->GetHealthPoint() == 0)
 		State->SetDeathMode();
 
-	return DamageAmount;
+	return Damage;
 }
 
-UEnemyStateComponent* ACorpse::GetStateComponent()
+UEnemyStateComponent* AEnemyBase::GetStateComponent()
 {
 	return State;
 }
 
-void ACorpse::OnEnemyStateTypeChanged(EEnemyStateType InPrevType, EEnemyStateType InNewType)
+void AEnemyBase::Death()
 {
-	switch (InNewType)
-	{
-	case EEnemyStateType::Idle:	break;
-	case EEnemyStateType::Approach: break;
-	case EEnemyStateType::Action: break;
-	case EEnemyStateType::Patrol: break;
-	case EEnemyStateType::Hitted: break;
-	case EEnemyStateType::Stunned: break;
-	case EEnemyStateType::Avoid: break;
-	case EEnemyStateType::Death: break;
-	case EEnemyStateType::Max: break;
-	default: break;
-	}
+	Destroy();
 }
 
-void ACorpse::SetDelegates()
+void AEnemyBase::SetNameTag(FString InName)
 {
-	State->OnEnemyStateTypeChanged.AddDynamic(this, &ACorpse::OnEnemyStateTypeChanged);
+	Cast<UEnemyNameTag>(NameTagWidget->GetUserWidgetObject())->SetNameTag(FText::FromString(InName));
 }
 
-void ACorpse::InitStatus()
+void AEnemyBase::UpdateHealthPoint()
+{
+	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHealthPoint(), Status->GetMaxHealthPoint());
+}
+
+void AEnemyBase::InitStatus()
 {
 	Status->SetHealthPoint(Status->GetMaxHealthPoint());
 }
 
-void ACorpse::InitWidgets()
+void AEnemyBase::InitWidgets()
 {
 	NameTagWidget->InitWidget();
 	HPWidget->InitWidget();
-
-	Cast<UEnemyNameTag>(NameTagWidget->GetUserWidgetObject())->SetNameTag(FText::FromString("Corpse"));
-	Cast<UEnemyHelthPoint>(HPWidget->GetUserWidgetObject())->Set_HelthPoint_Percent(Status->GetHealthPoint(), Status->GetMaxHealthPoint());
 }
 
-void ACorpse::EquipmentSword()
-{
-	Sword = GetWorld()->SpawnActor<AEnemy_Sword>(FVector::ZeroVector, FRotator::ZeroRotator);
-	if (Sword)
-	{
-		const USkeletalMeshSocket* socket = GetMesh()->GetSocketByName("SwordSocket");
-		socket->AttachActor(Sword, GetMesh());
-		Sword->SetOwner(this);
-	}
-}
-
-void ACorpse::KnockBack()
-{
-}
 

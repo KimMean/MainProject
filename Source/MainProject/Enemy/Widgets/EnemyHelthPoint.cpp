@@ -2,6 +2,7 @@
 
 #include "Components/ProgressBar.h"
 
+
 void UEnemyHelthPoint::Set_HelthPoint_Percent(float InPercent)
 {
 	HP_Bar->SetPercent(InPercent);
