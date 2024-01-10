@@ -8,6 +8,7 @@ UENUM(BlueprintType)
 enum class EEnemyStateType : uint8
 {
 	Idle,
+	Wait,
 	Approach,
 	Action,
 	Patrol,
@@ -36,6 +37,7 @@ public :
 
 public :
 	FORCEINLINE bool IsIdleMode() { return Type == EEnemyStateType::Idle; }
+	FORCEINLINE bool IsWaitMode() { return Type == EEnemyStateType::Wait; }
 	FORCEINLINE bool IsApproachMode() { return Type == EEnemyStateType::Approach; }
 	FORCEINLINE bool IsActionMode() { return Type == EEnemyStateType::Action; }
 	FORCEINLINE bool IsPatrolMode() { return Type == EEnemyStateType::Patrol; }
@@ -46,6 +48,7 @@ public :
 
 public :
 	void SetIdleMode();
+	void SetWaitMode();
 	void SetApproachMode();
 	void SetActionMode();
 	void SetPatrolMode();

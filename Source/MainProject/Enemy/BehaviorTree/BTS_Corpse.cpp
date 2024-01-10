@@ -27,6 +27,7 @@ void UBTS_Corpse::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	
 	ACharacter_TwinBlast* target = behavior->GetTargetPlayer();
 
+	if (state->IsWaitMode()) return;
 	if (state->IsActionMode()) return;
 
 	if (!target)	// 플레이어가 범위안에 없음

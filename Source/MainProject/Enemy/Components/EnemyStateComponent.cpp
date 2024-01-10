@@ -17,6 +17,11 @@ void UEnemyStateComponent::SetIdleMode()
 	ChangeType(EEnemyStateType::Idle);
 }
 
+void UEnemyStateComponent::SetWaitMode()
+{
+	ChangeType(EEnemyStateType::Wait);
+}
+
 void UEnemyStateComponent::SetApproachMode()
 {
 	ChangeType(EEnemyStateType::Approach );
