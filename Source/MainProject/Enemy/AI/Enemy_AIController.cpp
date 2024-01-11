@@ -105,3 +105,18 @@ void AEnemy_AIController::OnPerceptionUpdated(const TArray<AActor*>& UpdateActor
 	}
 	SetTargetPlayer(player);
 }
+
+void AEnemy_AIController::SetSenseConfigSight_SightRadius(float InRadius)
+{
+	Sight->SightRadius = InRadius;
+}
+
+void AEnemy_AIController::SetSenseConfigSight_LoseSightRadius(float InRadius)
+{
+	Sight->LoseSightRadius = InRadius;
+}
+
+void AEnemy_AIController::SetActionRange(float InActionRange)
+{
+	ActionRange = InActionRange;
+}

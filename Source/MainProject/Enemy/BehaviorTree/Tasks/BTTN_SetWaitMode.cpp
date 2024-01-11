@@ -1,15 +1,15 @@
-#include "Enemy/BehaviorTree/Tasks/BTTN_SetIdleMode.h"
+#include "Enemy/BehaviorTree/Tasks/BTTN_SetWaitMode.h"
 
 #include "Enemy/EnemyBase.h"
 #include "Enemy/AI/Enemy_AIController.h"
 #include "Enemy/Components/EnemyStateComponent.h"
 
-UBTTN_SetIdleMode::UBTTN_SetIdleMode()
+UBTTN_SetWaitMode::UBTTN_SetWaitMode()
 {
-	NodeName = "SetIdleMode";
+	NodeName = "SetWaitMode";
 }
 
-EBTNodeResult::Type UBTTN_SetIdleMode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTN_SetWaitMode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
@@ -17,7 +17,7 @@ EBTNodeResult::Type UBTTN_SetIdleMode::ExecuteTask(UBehaviorTreeComponent& Owner
 	AEnemyBase* enemy = Cast<AEnemyBase>(controller->GetPawn());
 	UEnemyStateComponent* state = enemy->FindComponentByClass<UEnemyStateComponent>();
 
-	state->SetIdleMode();
+	state->SetWaitMode();
 
 	return EBTNodeResult::Succeeded;
 }

@@ -5,6 +5,7 @@
 #include "Charger.generated.h"
 
 class UBehaviorTree;
+class USphereComponent;
 
 UCLASS()
 class MAINPROJECT_API ACharger : public AEnemyBase
@@ -23,4 +24,17 @@ public:
 public:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+public :
+	void SetCollisionActive(bool InActive);
+
+private :
+	void InitDelegates();
+
+private :
+	UFUNCTION()
+		void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+private :
+	UPROPERTY(VisibleDefaultsOnly)
+		USphereComponent* SphereCollider;
 };

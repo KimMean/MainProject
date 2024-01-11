@@ -20,7 +20,7 @@ void ACorpse::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetNameTag("Charger");
+	SetNameTag("Corpse");
 	UpdateHealthPoint(); 
 	EquipmentSword();
 }
