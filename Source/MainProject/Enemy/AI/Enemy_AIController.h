@@ -36,6 +36,11 @@ private :
 	UFUNCTION()
 		void OnPerceptionUpdated(const TArray<AActor*>& UpdateActors);
 
+public :
+	void SetSenseConfigSight_SightRadius(float InRadius);
+	void SetSenseConfigSight_LoseSightRadius(float InRadius);
+	void SetActionRange(float InActionRange);
+
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		UBehaviorComponent* Behavior;

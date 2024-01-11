@@ -11,9 +11,9 @@ void USetIdle::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Anima
 {
 	Super::Notify(MeshComp, Animation, EventReference);
 
-	UEnemyStateComponent* status = MeshComp->GetOwner()->FindComponentByClass<UEnemyStateComponent>();
+	UEnemyStateComponent* state = MeshComp->GetOwner()->FindComponentByClass<UEnemyStateComponent>();
 
-	if (!status) return;
+	if (!state) return;
 
-	status->SetIdleMode();
+	state->SetIdleMode();
 }

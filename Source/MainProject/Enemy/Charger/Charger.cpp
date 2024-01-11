@@ -1,12 +1,23 @@
 #include "Enemy/Charger/Charger.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Components/PrimitiveComponent.h"
+#include "Components/SphereComponent.h"
 #include "Enemy/AI/Enemy_AIController.h"
 #include "Abilities/DamageType/DamageBase.h"
+
+#include "Utilities/DebugLog.h"
 
 ACharger::ACharger()
 {
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(L"SkeletalMesh'/Game/CityofBrass_Enemies/Meshes/Enemy/Charger/Charger.Charger'");
 	GetMesh()->SetSkeletalMesh(mesh.Object);
+
+	SphereCollider = CreateDefaultSubobject<USphereComponent>("SphereCollision");
+	SphereCollider->SetupAttachment(GetMesh());
+	SphereCollider->InitSphereRadius(50);
+	SphereCollider->AddRelativeLocation(FVector(100, 0, 100));
+	
 
 	AIControllerClass = AEnemy_AIController::StaticClass();
 }
@@ -16,7 +27,12 @@ void ACharger::BeginPlay()
 	Super::BeginPlay();
 
 	SetNameTag("Charger");
+	InitDelegates();
 	UpdateHealthPoint();
+	SetCollisionActive(false);
+
+	Cast<AEnemy_AIController>(GetController())->SetActionRange(600);
+	
 }
 
 void ACharger::Tick(float DeltaTime)
@@ -55,5 +71,29 @@ float ACharger::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContr
 	}
 
 	return Damage;
+}
+
+void ACharger::SetCollisionActive(bool InActive)
+{
+	if (InActive)
+	{
+		SphereCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+	else
+	{
+		SphereCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+}
+
+void ACharger::InitDelegates()
+{
+	SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &ACharger::OnComponentBeginOverlap);
+}
+
+void ACharger::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor->ActorHasTag("Enemy")) return;
+
+	UGameplayStatics::ApplyDamage(OtherActor, 5, GetOwner()->GetInstigatorController(), this, UDamageType::StaticClass());
 }
 

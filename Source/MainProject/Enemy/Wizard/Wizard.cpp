@@ -17,6 +17,10 @@ void AWizard::BeginPlay()
 
 	SetNameTag("Wizard");
 	UpdateHealthPoint();
+
+	Cast<AEnemy_AIController>(GetController())->SetSenseConfigSight_SightRadius(800);
+	Cast<AEnemy_AIController>(GetController())->SetSenseConfigSight_LoseSightRadius(1000);
+	Cast<AEnemy_AIController>(GetController())->SetActionRange(600);
 }
 
 void AWizard::Tick(float DeltaTime)
