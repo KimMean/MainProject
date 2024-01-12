@@ -42,7 +42,7 @@ float ASploder::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContr
 		return Damage;
 
 
-	Cast<AEnemy_AIController>(GetController())->SetTargetPlayer(EventInstigator->GetCharacter());
+	//Cast<AEnemy_AIController>(GetController())->SetTargetPlayer(EventInstigator->GetCharacter());
 
 	UDamageBase* damageType = Cast<UDamageBase>(DamageEvent.DamageTypeClass->GetDefaultObject());
 	if (damageType)
@@ -62,8 +62,7 @@ float ASploder::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContr
 		}
 	}
 
-	if (State->IsIdleMode())
-		State->SetWaitMode();
+	State->SetWaitMode();
 
 	if (!GetWorldTimerManager().IsTimerActive(BombTimer))
 		GetWorldTimerManager().SetTimer(BombTimer, this, &ASploder::BombTimeCountDown, 1.0f, true);

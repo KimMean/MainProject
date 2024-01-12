@@ -74,7 +74,7 @@ void AChargeBolt::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	ignoreActors.Add(this);
 	ignoreActors.Add(GetOwner());
 
-	UGameplayStatics::ApplyRadialDamage(GetWorld(), 30, GetActorLocation(), 300.0f, DamageType, ignoreActors, this, GetOwner()->GetInstigatorController(), false);
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), 75, GetActorLocation(), 300.0f, DamageType, ignoreActors, this, GetOwner()->GetInstigatorController(), false);
 
 	Destroy();
 }

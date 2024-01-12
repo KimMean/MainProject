@@ -42,7 +42,7 @@ float AWizard::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContro
 	if (State->IsDeathMode())
 		return Damage;
 
-	Cast<AEnemy_AIController>(GetController())->SetTargetPlayer(EventInstigator->GetCharacter());
+	//Cast<AEnemy_AIController>(GetController())->SetTargetPlayer(EventInstigator->GetCharacter());
 
 	UDamageBase* damageType = Cast<UDamageBase>(DamageEvent.DamageTypeClass->GetDefaultObject());
 	if (damageType)
