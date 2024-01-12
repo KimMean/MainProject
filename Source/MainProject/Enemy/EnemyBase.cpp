@@ -70,14 +70,19 @@ float AEnemyBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	State->SetIdleMode();
+	if (!EventInstigator->GetPawn()->ActorHasTag("Enemy"))
+	{
+		Status->SetTarget(EventInstigator->GetCharacter());
+	}
+
+	//State->SetIdleMode();
 
 	Status->AdjustHealthPoint(-Damage);
 	Status->SetIsHitted(true);
 
 	UpdateHealthPoint();
 
-	if (Status->GetHealthPoint() == 0)
+	if (Status->GetHealthPoint() <= 0)
 		State->SetDeathMode();
 
 	return Damage;

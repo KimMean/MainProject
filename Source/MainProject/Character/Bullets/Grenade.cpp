@@ -82,7 +82,7 @@ void AGrenade::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	ignoreActors.Add(this);
 	ignoreActors.Add(GetOwner());
 
-	UGameplayStatics::ApplyRadialDamage(GetWorld(), 20, GetActorLocation(), 300.0f, DamageType, ignoreActors, this, GetOwner()->GetInstigatorController(), false);
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), 55, GetActorLocation(), 300.0f, DamageType, ignoreActors, this, GetOwner()->GetInstigatorController(), false);
 
 	Destroy();
 }

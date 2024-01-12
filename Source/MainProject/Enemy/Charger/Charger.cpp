@@ -48,7 +48,7 @@ float ACharger::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContr
 	if (State->IsDeathMode())
 		return Damage;
 
-	Cast<AEnemy_AIController>(GetController())->SetTargetPlayer(EventInstigator->GetCharacter());
+	//Cast<AEnemy_AIController>(GetController())->SetTargetPlayer(EventInstigator->GetCharacter());
 
 	UDamageBase* damageType = Cast<UDamageBase>(DamageEvent.DamageTypeClass->GetDefaultObject());
 	if (damageType)
