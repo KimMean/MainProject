@@ -31,6 +31,7 @@ protected:
 public :
 	FORCEINLINE float GetMaxHealthPoint() { return MaxHealthPoint; }
 	FORCEINLINE float GetHealthPoint() { return HealthPoint; }
+	FORCEINLINE void SetMaxHealthPoint(float InHealthPoint) { MaxHealthPoint = InHealthPoint; }
 	FORCEINLINE void SetHealthPoint(float InHealthPoint) { HealthPoint = InHealthPoint; }
 	void AdjustHealthPoint(float InAdjustValue);
 
