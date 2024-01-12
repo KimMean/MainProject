@@ -4,7 +4,6 @@
 #include "Enemy/EnemyBase.h"
 #include "Charger.generated.h"
 
-class UBehaviorTree;
 class USphereComponent;
 
 UCLASS()

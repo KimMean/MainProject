@@ -70,6 +70,8 @@ float AEnemyBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
+	State->SetIdleMode();
+
 	Status->AdjustHealthPoint(-Damage);
 	Status->SetIsHitted(true);
 
