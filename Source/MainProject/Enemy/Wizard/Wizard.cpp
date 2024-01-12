@@ -2,6 +2,10 @@
 
 #include "Enemy/AI/Enemy_AIController.h"
 #include "Abilities/DamageType/DamageBase.h"
+#include "Enemy/Weapons/FireBall.h"
+#include "Enemy/Components/EnemyStatusComponent.h"
+
+#include "Utilities/DebugLog.h"
 
 AWizard::AWizard()
 {
@@ -9,6 +13,9 @@ AWizard::AWizard()
 	GetMesh()->SetSkeletalMesh(mesh.Object);
 
 	AIControllerClass = AEnemy_AIController::StaticClass();
+
+	ConstructorHelpers::FClassFinder<AFireBall> fireBall(L"Blueprint'/Game/Enemies/Weapons/FireBall/BP_FireBall.BP_FireBall_C'");
+	FireBall = fireBall.Class;
 }
 
 void AWizard::BeginPlay()
@@ -58,4 +65,18 @@ float AWizard::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContro
 	}
 
 	return Damage;
+}
+
+void AWizard::Attack()
+{
+	FVector location = GetMesh()->GetSocketLocation("ThrowSocket");
+	FTransform transform(location);
+	AFireBall* fireBall = GetWorld()->SpawnActorDeferred<AFireBall>(FireBall, transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	if (fireBall == nullptr) return;
+
+	FVector destination = Status->GetTarget()->GetActorLocation();
+	FVector direction = destination - location;
+
+	fireBall->SetDirection(direction.GetSafeNormal());
+	fireBall->FinishSpawning(fireBall->GetTransform());
 }

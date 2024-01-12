@@ -28,6 +28,9 @@ public :
 	float GetSightRadius();
 	void SetTargetPlayer(ACharacter* character);
 
+	UFUNCTION()
+		void OnTargetChanged(ACharacter* InCharacter);
+
 protected :
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnUnPossess() override;
