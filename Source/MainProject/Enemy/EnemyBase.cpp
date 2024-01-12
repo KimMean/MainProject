@@ -86,6 +86,11 @@ UEnemyStateComponent* AEnemyBase::GetStateComponent()
 	return State;
 }
 
+void AEnemyBase::Attack()
+{
+	return;
+}
+
 void AEnemyBase::Death()
 {
 	Destroy();

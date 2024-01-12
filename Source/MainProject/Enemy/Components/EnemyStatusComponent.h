@@ -4,6 +4,10 @@
 #include "Components/ActorComponent.h"
 #include "EnemyStatusComponent.generated.h"
 
+class ACharacter;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTargetChanged, ACharacter*, Target);
+
 UENUM(BlueprintType)
 enum class EEnemySpeedType : uint8
 {
@@ -35,8 +39,18 @@ public :
 
 
 public :
+	void SetTarget(ACharacter* InCharacter);
+	ACharacter* GetTarget();
 	void SetSpeed(EEnemySpeedType InType);
 
+private :
+	ACharacter* Target;
+
+public :
+	FTargetChanged OnTargetChanged;
+
+	UFUNCTION()
+		void OnTargetChange(ACharacter* InCharacter);
 
 private :
 	UPROPERTY(EditDefaultsOnly, Category = "Speed")

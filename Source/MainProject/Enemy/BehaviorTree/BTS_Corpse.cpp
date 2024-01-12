@@ -1,11 +1,11 @@
 #include "Enemy/BehaviorTree/BTS_Corpse.h"
 
+#include "Gameframework/Character.h"
 #include "Enemy/AI/Enemy_AIController.h"
 #include "Enemy/EnemyBase.h"
 #include "Enemy/BehaviorComponent.h"
 #include "Enemy/Components/EnemyStateComponent.h"
 #include "Enemy/Components/EnemyStatusComponent.h"
-#include "Character/Character_TwinBlast.h"
 
 #include "Utilities/DebugLog.h"
 
@@ -19,13 +19,13 @@ void UBTS_Corpse::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	AEnemy_AIController* controller = Cast<AEnemy_AIController>(OwnerComp.GetOwner());
-	UBehaviorComponent* behavior = controller->FindComponentByClass<UBehaviorComponent>();
+	//UBehaviorComponent* behavior = controller->FindComponentByClass<UBehaviorComponent>();
 	
 	AEnemyBase* ai = Cast<AEnemyBase>(controller->GetPawn());
 	UEnemyStateComponent* state = ai->FindComponentByClass<UEnemyStateComponent>();
 	UEnemyStatusComponent* status = ai->FindComponentByClass<UEnemyStatusComponent>();
 	
-	ACharacter_TwinBlast* target = behavior->GetTargetPlayer();
+	ACharacter* target = status->GetTarget();
 
 	if (state->IsWaitMode()) return;
 	if (state->IsActionMode()) return;

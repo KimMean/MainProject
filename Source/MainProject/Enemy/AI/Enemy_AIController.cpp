@@ -40,6 +40,10 @@ AEnemy_AIController::AEnemy_AIController()
 void AEnemy_AIController::BeginPlay()
 {
 	Super::BeginPlay();
+
+
+	UEnemyStatusComponent* status = OwnerEnemy->FindComponentByClass<UEnemyStatusComponent>();
+	status->OnTargetChanged.AddDynamic(this, &AEnemy_AIController::OnTargetChanged);
 }
 
 void AEnemy_AIController::Tick(float DeltaTime)
@@ -62,7 +66,15 @@ float AEnemy_AIController::GetSightRadius()
 
 void AEnemy_AIController::SetTargetPlayer(ACharacter* character)
 {
-	Blackboard->SetValueAsObject("Player", character);
+	UEnemyStatusComponent* status = OwnerEnemy->FindComponentByClass<UEnemyStatusComponent>();
+	
+	status->SetTarget(character);
+	//Blackboard->SetValueAsObject("Player", character);
+}
+
+void AEnemy_AIController::OnTargetChanged(ACharacter* InCharacter)
+{
+	Blackboard->SetValueAsObject("Player", InCharacter);
 }
 
 void AEnemy_AIController::OnPossess(APawn* InPawn)
@@ -98,6 +110,7 @@ void AEnemy_AIController::OnPerceptionUpdated(const TArray<AActor*>& UpdateActor
 	ACharacter* player = nullptr;
 	for (AActor* actor : actors)
 	{
+		if (actor->ActorHasTag("Enemy")) continue;
 		player = Cast<ACharacter>(actor);
 
 		if (!!player)

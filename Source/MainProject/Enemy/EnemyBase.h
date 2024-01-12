@@ -32,6 +32,7 @@ public:
 	UEnemyStateComponent* GetStateComponent();
 
 public:
+	virtual void Attack();
 	virtual void Death();
 
 protected :
