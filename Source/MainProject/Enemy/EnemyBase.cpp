@@ -54,6 +54,13 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	ACharacter* target = Status->GetTarget();
+	if (target)
+	{
+		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), target->GetActorLocation()));
+	}
+
 	FVector cameraLocation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetTransform().GetLocation();
 
 	FVector hpLocation = HPWidget->K2_GetComponentLocation();

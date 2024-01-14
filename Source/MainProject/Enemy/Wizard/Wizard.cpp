@@ -69,6 +69,8 @@ float AWizard::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContro
 
 void AWizard::Attack()
 {
+	if (!Status->GetTarget()) return;
+
 	FVector location = GetMesh()->GetSocketLocation("ThrowSocket");
 	FTransform transform(location);
 	AFireBall* fireBall = GetWorld()->SpawnActorDeferred<AFireBall>(FireBall, transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);

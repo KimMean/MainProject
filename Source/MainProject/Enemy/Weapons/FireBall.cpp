@@ -27,6 +27,9 @@ AFireBall::AFireBall()
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> particle(L"ParticleSystem'/Game/FXVarietyPack/Particles/P_ky_fireBall.P_ky_fireBall'");
 	ParticleSystem->SetTemplate(particle.Object);
+
+	ConstructorHelpers::FObjectFinder<UParticleSystem> impact(L"ParticleSystem'/Game/FXVarietyPack/Particles/P_ky_hit2.P_ky_hit2'");
+	ImpactParticle = impact.Object;
 }
 
 void AFireBall::BeginPlay()
@@ -40,6 +43,8 @@ void AFireBall::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent
 {
 	if (OtherActor == GetOwner()) return;
 	if (OtherActor->ActorHasTag("Enemy")) return;
+
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, GetActorTransform());
 
 	UGameplayStatics::ApplyDamage(OtherActor, 10, GetOwner()->GetInstigatorController(), this, UDamageType::StaticClass());
 

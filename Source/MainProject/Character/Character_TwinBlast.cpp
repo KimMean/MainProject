@@ -92,7 +92,7 @@ void ACharacter_TwinBlast::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnSprintMode);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OnJogMode);
-	//PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAvoid);
+	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnAvoid);
 
 	PlayerInputComponent->BindAction("UltimateMode", EInputEvent::IE_Pressed, this, &ACharacter_TwinBlast::OnUltimateMode);
 	PlayerInputComponent->BindAction("UltimateMode", EInputEvent::IE_Released, this, &ACharacter_TwinBlast::OffUltimateMode);
@@ -134,50 +134,48 @@ void ACharacter_TwinBlast::End_DoubleShot()
 
 void ACharacter_TwinBlast::Firing(const USkeletalMeshSocket* InSocket)
 {
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-	SpawnParams.Instigator = this;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.bDeferConstruction = true;
-	
-
 	FVector location = GetMesh()->GetSocketLocation(InSocket->SocketName);
-	FRotator rotator;
+	FTransform transform(location);
 
 	switch (Status->GetActionMode())
 	{
 	case EActionMode::NormalMode:
 	case EActionMode::UltimateMode:
-		BulletFire(location, rotator, SpawnParams);
+		BulletFire(transform);
 		break;
 	case EActionMode::ChargeBlastMode:
-		ChargeBoltFire(location, rotator, SpawnParams);
+		ChargeBoltFire(transform);
 		break;
 	case EActionMode::GrenadeMode:
-		GrenadeFire(location, rotator, SpawnParams);
+		GrenadeFire(transform);
 		break;
 	}
 }
 
-void ACharacter_TwinBlast::BulletFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam)
+void ACharacter_TwinBlast::BulletFire(const FTransform transform)
 {
-	ABullet* bullet = GetWorld()->SpawnActor<ABullet>(Bullet, InLocation, InRotator, InParam);
+	ABullet* bullet = GetWorld()->SpawnActorDeferred<ABullet>(Bullet, transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	if (bullet == nullptr) return;
+
 	bullet->SetDirection(Camera->GetForwardVector());
 	bullet->FinishSpawning(bullet->GetTransform());
+
 }
 
-void ACharacter_TwinBlast::ChargeBoltFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam)
+void ACharacter_TwinBlast::ChargeBoltFire(const FTransform transform)
 {
-	AChargeBolt* chargeBolt = GetWorld()->SpawnActor<AChargeBolt>(ChargeBolt, InLocation, InRotator, InParam);
+	AChargeBolt* chargeBolt = GetWorld()->SpawnActorDeferred<AChargeBolt>(ChargeBolt, transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	if (chargeBolt == nullptr) return;
+	
 	chargeBolt->SetDirection(Camera->GetForwardVector());
 	chargeBolt->FinishSpawning(chargeBolt->GetTransform());
 }
 
-void ACharacter_TwinBlast::GrenadeFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam)
+void ACharacter_TwinBlast::GrenadeFire(const FTransform transform)
 {
-	AGrenade* grenade = GetWorld()->SpawnActor<AGrenade>(Grenade, InLocation, InRotator, InParam);
+
+	AGrenade* grenade = GetWorld()->SpawnActorDeferred<AGrenade>(Grenade, transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+
 	if (grenade == nullptr) return;
 	grenade->SetProjectileDirection(Camera->GetForwardVector());
 	grenade->FinishSpawning(grenade->GetTransform());
@@ -262,7 +260,20 @@ void ACharacter_TwinBlast::OnSprintMode()
 
 void ACharacter_TwinBlast::OnAvoid()
 {
-	//Animation->Dive_Forward();
+	//UKismetMathLibrary::TransformDirection
+	//Direction = UKismetAnimationLibrary::CalculateDirection(GetVelocity(), GetControlRotation());
+	
+	FVector NormalizedVel = GetVelocity().GetSafeNormal2D();
+	float ForwardCosAngle = FVector::DotProduct(GetActorForwardVector(), NormalizedVel);
+	float RightCosAngle = FVector::DotProduct(GetActorRightVector(), NormalizedVel);
+	float ForwardDeltaDegree = FMath::RadiansToDegrees(FMath::Acos(ForwardCosAngle));
+	if (RightCosAngle < 0)
+	{
+		ForwardDeltaDegree *= -1;
+	}
+	DebugLog::Print(ForwardDeltaDegree);
+	//DebugLog::Print(RightCosAngle);
+	Animation->Dive_Forward();
 }
 
 void ACharacter_TwinBlast::OnNormalMode()

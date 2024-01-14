@@ -36,9 +36,9 @@ public:
 	void End_DoubleShot();
 
 	void Firing(const USkeletalMeshSocket* InSocket);
-	void BulletFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam);
-	void ChargeBoltFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam);
-	void GrenadeFire(const FVector& InLocation, const FRotator& InRotator, const FActorSpawnParameters& InParam);
+	void BulletFire(const FTransform transform);
+	void ChargeBoltFire(const FTransform transform);
+	void GrenadeFire(const FTransform transform);
 	void EndAttackMode();
 
 private:

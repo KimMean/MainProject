@@ -36,4 +36,7 @@ private :
 private :
 	UPROPERTY(VisibleDefaultsOnly)
 		UProjectileMovementComponent* ProjectileMovement;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "ImpactParticle")
+		UParticleSystem* ImpactParticle;
 };
