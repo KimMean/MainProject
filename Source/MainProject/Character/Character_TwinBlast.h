@@ -40,6 +40,7 @@ public:
 	void ChargeBoltFire(const FTransform transform);
 	void GrenadeFire(const FTransform transform);
 	void EndAttackMode();
+	void OnCopyPose();
 
 private:
 	void OnMoveForward(float Axis);
@@ -108,6 +109,9 @@ private :
 	class TSubclassOf<class ABullet> Bullet;
 	class TSubclassOf<class AChargeBolt> ChargeBolt;
 	class TSubclassOf<class AGrenade> Grenade;
+
+private :
+	TSubclassOf<class AGhostTrail> GhostTrail;
 
 private :
 	UPROPERTY(EditDefaultsOnly)

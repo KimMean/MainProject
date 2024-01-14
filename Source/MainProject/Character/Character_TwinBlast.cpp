@@ -15,6 +15,7 @@
 #include "Character/Bullets/Bullet.h"
 #include "Character/Bullets/ChargeBolt.h"
 #include "Character/Bullets/Grenade.h"
+#include "Character/Effects/GhostTrail.h"
 #include "Utilities/DebugLog.h"
 
 ACharacter_TwinBlast::ACharacter_TwinBlast()
@@ -57,6 +58,10 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	ChargeBolt = chargeBolt.Class;
 	ConstructorHelpers::FClassFinder<AGrenade> grenade(L"Blueprint'/Game/Characters/Bullets/BP_Grenade.BP_Grenade_C'");
 	Grenade = grenade.Class;
+
+	ConstructorHelpers::FClassFinder<AGhostTrail> ghostTrail(L"Blueprint'/Game/Characters/TwinBlast/PoseMesh/BP_GhostTrail.BP_GhostTrail_C'");
+	GhostTrail = ghostTrail.Class;
+
 }
 
 void ACharacter_TwinBlast::BeginPlay()
@@ -190,6 +195,16 @@ void ACharacter_TwinBlast::EndAttackMode()
 	Status->ChangeActionMode(EActionMode::NormalMode);
 }
 
+void ACharacter_TwinBlast::OnCopyPose()
+{
+	FTransform transform(GetMesh()->K2_GetComponentToWorld());
+	AGhostTrail* ghostTrail = GetWorld()->SpawnActorDeferred<AGhostTrail>(GhostTrail, transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+
+	if (ghostTrail == nullptr) return;
+	ghostTrail->SetSkeletalMeshPose(GetMesh());
+	ghostTrail->FinishSpawning(ghostTrail->GetTransform());
+}
+
 void ACharacter_TwinBlast::OnMoveForward(float Axis)
 {
 	//FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
@@ -260,21 +275,36 @@ void ACharacter_TwinBlast::OnSprintMode()
 
 void ACharacter_TwinBlast::OnAvoid()
 {
-	//UKismetMathLibrary::TransformDirection
-	//Direction = UKismetAnimationLibrary::CalculateDirection(GetVelocity(), GetControlRotation());
-	
 	FVector NormalizedVel = GetVelocity().GetSafeNormal2D();
 	float ForwardCosAngle = FVector::DotProduct(GetActorForwardVector(), NormalizedVel);
 	float RightCosAngle = FVector::DotProduct(GetActorRightVector(), NormalizedVel);
-	float ForwardDeltaDegree = FMath::RadiansToDegrees(FMath::Acos(ForwardCosAngle));
-	if (RightCosAngle < 0)
+	
+	if (ForwardCosAngle > 0.5)
 	{
-		ForwardDeltaDegree *= -1;
+		Animation->Dive_Forward();
+		LaunchCharacter(GetActorForwardVector() * 2000, true, false);
+		return;
 	}
-	DebugLog::Print(ForwardDeltaDegree);
-	//DebugLog::Print(RightCosAngle);
-	Animation->Dive_Forward();
+	if (ForwardCosAngle < -0.5)
+	{
+		Animation->Dive_Backward();
+		LaunchCharacter(-GetActorForwardVector() * 2000, false, false);
+		return;
+	}
+	if (RightCosAngle > 0.5)
+	{
+		Animation->Dive_Right();
+		LaunchCharacter(GetActorRightVector() * 2000, false, false);
+		return;
+	}
+	if (RightCosAngle < -0.5)
+	{
+		Animation->Dive_Left();
+		LaunchCharacter(-GetActorRightVector() * 2000, false, false);
+		return;
+	}
 }
+
 
 void ACharacter_TwinBlast::OnNormalMode()
 {

@@ -77,11 +77,11 @@ private :
 	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
 		bool bInAir = false;
 	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
-		float WalkSpeed = 200.0f;
+		float WalkSpeed = 300.0f;
 	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
-		float RunSpeed = 400.0f;
+		float RunSpeed = 600.0f;
 	UPROPERTY(VisibleDefaultsOnly, Category = "Speed")
-		float SprintSpeed = 600.0f;
+		float SprintSpeed = 800.0f;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Attack")
 		bool bAttack = false;
