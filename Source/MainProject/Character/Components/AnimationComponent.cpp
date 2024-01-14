@@ -79,17 +79,17 @@ void UAnimationComponent::Dive_Forward()
 
 void UAnimationComponent::Dive_Backward()
 {
-	PlayAnimation(EStateType::Dive_Backward);
+	PlayAnimMontage(EStateType::Dive_Backward);
 }
 
 void UAnimationComponent::Dive_Right()
 {
-	PlayAnimation(EStateType::Dive_Right);
+	PlayAnimMontage(EStateType::Dive_Right);
 }
 
 void UAnimationComponent::Dive_Left()
 {
-	PlayAnimation(EStateType::Dive_Left);
+	PlayAnimMontage(EStateType::Dive_Left);
 }
 
 
