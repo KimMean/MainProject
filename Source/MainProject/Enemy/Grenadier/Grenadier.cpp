@@ -62,6 +62,8 @@ float AGrenadier::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 
 void AGrenadier::Attack()
 {
+	if (!Status->GetTarget()) return;
+
 	FVector location = GetMesh()->GetSocketLocation("ThrowSocket");
 	FTransform transform(location);
 	ABomb* bomb = GetWorld()->SpawnActorDeferred<ABomb>(Bomb, transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);

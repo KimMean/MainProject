@@ -75,8 +75,8 @@ void AGrenade::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	if (OtherActor == GetOwner()) return;
 
 	FRotator rotator = SweepResult.ImpactNormal.Rotation();
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, SweepResult.Location, rotator);
-	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, SweepResult.Location, rotator, 10.0f);
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, GetActorLocation(), rotator);
+	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, GetActorLocation(), rotator, 10.0f);
 
 	TArray<AActor*> ignoreActors;
 	ignoreActors.Add(this);

@@ -28,7 +28,7 @@ ABomb::ABomb()
 	Projectile->InitialSpeed = 3e+3f;
 	Projectile->MaxSpeed = 3e+3f;
 
-	ConstructorHelpers::FObjectFinder<UParticleSystem> particle(L"ParticleSystem'/Game/ParagonTwinblast/FX/Particles/Abilities/VortexGrenade/FX/P_TwinBlast_VortexGrenade_ExplodeBallistic.P_TwinBlast_VortexGrenade_ExplodeBallistic'");
+	ConstructorHelpers::FObjectFinder<UParticleSystem> particle(L"ParticleSystem'/Game/FXVarietyPack/Particles/P_ky_explosion.P_ky_explosion'");
 	ImpactParticle = particle.Object;
 }
 
