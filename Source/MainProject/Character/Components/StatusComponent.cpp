@@ -2,7 +2,7 @@
 
 UStatusComponent::UStatusComponent()
 {
-	MaxHealth = 100;
+	MaxHealth = 1000;
 	CurHealth = MaxHealth;
 }
 

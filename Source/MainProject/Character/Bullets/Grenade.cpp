@@ -46,6 +46,11 @@ AGrenade::AGrenade()
 
 	ConstructorHelpers::FClassFinder<UStunDamage> damageType(L"Class'/Script/MainProject.StunDamage'");
 	DamageType = damageType.Class;
+	
+	ConstructorHelpers::FObjectFinder<USoundBase> sound(L"SoundWave'/Game/Characters/Sound/explosion.explosion'");
+	Sound = sound.Object;
+
+	
 }
 
 void AGrenade::BeginPlay()
@@ -77,6 +82,7 @@ void AGrenade::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	FRotator rotator = SweepResult.ImpactNormal.Rotation();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, GetActorLocation(), rotator);
 	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, GetActorLocation(), rotator, 10.0f);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), Sound, GetActorLocation());
 
 	TArray<AActor*> ignoreActors;
 	ignoreActors.Add(this);

@@ -39,4 +39,7 @@ private :
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "ImpactParticle")
 		UParticleSystem* ImpactParticle;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class USoundBase* Sound;
 };

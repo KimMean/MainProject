@@ -40,6 +40,9 @@ AEnemyBase::AEnemyBase()
 	HPWidget->SetWidgetSpace(EWidgetSpace::World);
 	HPWidget->SetRelativeLocation(FVector(0, 0, 220));
 	HPWidget->SetDrawSize(FVector2D(150, 15));
+
+	ConstructorHelpers::FObjectFinder<USoundBase> sound(L"SoundWave'/Game/Characters/Sound/Crack.Crack'");
+	HitSound = sound.Object;
 }
 
 void AEnemyBase::BeginPlay()
@@ -48,17 +51,18 @@ void AEnemyBase::BeginPlay()
 
 	InitStatus();
 	InitWidgets();
+	State->OnEnemyStateTypeChanged.AddDynamic(this, &AEnemyBase::OnStateTypeChanged);
 }
 
 void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
 	ACharacter* target = Status->GetTarget();
 	if (target)
 	{
-		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), target->GetActorLocation()));
+		if(!ActorHasTag("Sploder"))
+			SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), target->GetActorLocation()));
 	}
 
 	FVector cameraLocation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetTransform().GetLocation();
@@ -77,6 +81,8 @@ float AEnemyBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation(), 1.0f, 3.0f);
+
 	if (!EventInstigator->GetPawn()->ActorHasTag("Enemy"))
 	{
 		Status->SetTarget(EventInstigator->GetCharacter());
@@ -90,7 +96,10 @@ float AEnemyBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 	UpdateHealthPoint();
 
 	if (Status->GetHealthPoint() <= 0)
+	{
 		State->SetDeathMode();
+		Animation->Death();
+	}
 
 	return Damage;
 }
@@ -129,6 +138,14 @@ void AEnemyBase::InitWidgets()
 {
 	NameTagWidget->InitWidget();
 	HPWidget->InitWidget();
+}
+
+void AEnemyBase::OnStateTypeChanged(EEnemyStateType InPrevType, EEnemyStateType InNewType)
+{
+	if (InNewType == EEnemyStateType::Death)
+	{
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 

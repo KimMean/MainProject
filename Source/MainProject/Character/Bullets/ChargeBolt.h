@@ -51,4 +51,6 @@ private :
 	UPROPERTY(VisibleDefaultsOnly)
 		class UProjectileMovementComponent* Projectile;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class USoundBase* Sound;
 };

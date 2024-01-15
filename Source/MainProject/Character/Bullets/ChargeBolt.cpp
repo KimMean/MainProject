@@ -43,6 +43,9 @@ AChargeBolt::AChargeBolt()
 
 	ConstructorHelpers::FClassFinder<UKnockBack> damageType(L"Class'/Script/MainProject.KnockBack'");
 	DamageType = damageType.Class;
+
+	ConstructorHelpers::FObjectFinder<USoundBase> sound(L"SoundWave'/Game/Characters/Sound/explosion.explosion'");
+	Sound = sound.Object;
 }
 
 void AChargeBolt::BeginPlay()
@@ -64,11 +67,11 @@ void AChargeBolt::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (OtherActor == this) return;
 	if (OtherActor == GetOwner()) return;
-	if (!Cast<ACharacter>(OtherActor)) return;
 
 	FRotator rotator = SweepResult.ImpactNormal.Rotation();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, GetActorLocation(), rotator);
 	UGameplayStatics::SpawnDecalAtLocation(GetWorld(), DecalMaterial, DecalSize, GetActorLocation(), rotator, 10.0f);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), Sound, GetActorLocation());
 
 	TArray<AActor*> ignoreActors;
 	ignoreActors.Add(this);

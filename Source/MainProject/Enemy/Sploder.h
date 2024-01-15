@@ -27,6 +27,13 @@ private :
 	UPROPERTY(VisibleDefaultsOnly)
 		UParticleSystem* ImpactParticle;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class USoundBase* Sound;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class USoundBase* BombSound;
+
+
 	FTimerHandle BombTimer;
 	int32 BombTime = 5;
 };
