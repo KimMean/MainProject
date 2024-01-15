@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "Character/Components/StatusComponent.h"
+#include "Character/Components/InverseKinematicsComponent.h"
 #include "TwinBlastAnimInstance.generated.h"
 
 UCLASS()
@@ -24,6 +25,8 @@ protected :
 		float AimHorizontal;
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, replicated)
 		float AimVertical;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FIKData IKData;
 
 private :
 	UFUNCTION()

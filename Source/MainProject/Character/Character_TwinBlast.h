@@ -41,6 +41,8 @@ public:
 	void GrenadeFire(const FTransform transform);
 	void EndAttackMode();
 	void OnCopyPose();
+	void Begin_Roll();
+	void End_Roll();
 
 private:
 	void OnMoveForward(float Axis);
@@ -71,8 +73,6 @@ private :
 	void Attack_ChargeBlast();
 	void Attack_Grenade();
 
-	void Begin_Roll();
-	void End_Roll();
 
 
 
@@ -99,6 +99,9 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UStateComponent* State;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UInverseKinematicsComponent* IKComponent;
 
 
 private :

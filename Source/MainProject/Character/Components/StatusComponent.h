@@ -49,6 +49,8 @@ public :
 	FORCEINLINE void SetEnableCombo(bool InEnableCombo) { bEnableCombo = InEnableCombo; }
 
 	FORCEINLINE bool IsCanMove() { return bCanMove; }
+	FORCEINLINE bool GetIsAvoid() { return bIsAvoid; }
+	FORCEINLINE void SetIsAvoid(bool InAvoid) { bIsAvoid = InAvoid; }
 
 	FORCEINLINE EActionMode GetActionMode() { return ActionMode; }
 
@@ -97,6 +99,9 @@ private :
 		float MaxHealth;
 	UPROPERTY(VisibleDefaultsOnly, Category = "Health")
 		float CurHealth;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Avoid")
+		bool bIsAvoid;
 
 	EActionMode ActionMode;
 };

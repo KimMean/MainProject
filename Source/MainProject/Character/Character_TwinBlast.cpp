@@ -11,6 +11,7 @@
 
 #include "Character/Components/AnimationComponent.h"
 #include "Character/Components/StatusComponent.h"
+#include "Character/Components/InverseKinematicsComponent.h"
 #include "Character/Widgets/MainWidget.h"
 #include "Character/Bullets/Bullet.h"
 #include "Character/Bullets/ChargeBolt.h"
@@ -29,6 +30,7 @@ ACharacter_TwinBlast::ACharacter_TwinBlast()
 	Animation = CreateDefaultSubobject<UAnimationComponent>(TEXT("Animation"));
 	Status = CreateDefaultSubobject<UStatusComponent>(TEXT("Status"));
 	State = CreateDefaultSubobject<UStateComponent>(TEXT("State"));
+	IKComponent = CreateDefaultSubobject<UInverseKinematicsComponent>(TEXT("InverseKinematics"));
 
 	SpringArm->SetupAttachment(RootComponent);
 	Camera->SetupAttachment(SpringArm);
@@ -110,6 +112,8 @@ void ACharacter_TwinBlast::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 float ACharacter_TwinBlast::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	if (Status->GetIsAvoid()) return Damage;
 
 	Status->AdjustHealthPoint(-Damage);
 	float hpRatio = Status->GetCurHealthPoint() / Status->GetMaxHealthPoint();
@@ -409,10 +413,11 @@ void ACharacter_TwinBlast::OnActionModeChanged(EActionMode InPrevType, EActionMo
 
 void ACharacter_TwinBlast::Begin_Roll()
 {
-	State->SetIdleMode();
+	Status->SetIsAvoid(true);
 }
 
 void ACharacter_TwinBlast::End_Roll()
 {
+	Status->SetIsAvoid(false);
 }
 

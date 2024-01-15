@@ -29,6 +29,10 @@ void UTwinBlastAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	AimHorizontal = 0.0f;
 	AimVertical = OwnerCharacter->GetBaseAimRotation().Pitch;
 
+	UInverseKinematicsComponent* IK = TwinBlast->FindComponentByClass<UInverseKinematicsComponent>();
+	if (!IK) return;
+
+	IKData = IK->GetIKData();
 
 }
 
