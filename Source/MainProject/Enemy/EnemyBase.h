@@ -47,12 +47,19 @@ public :
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
 	FORCEINLINE uint8 GetTeamID() { return TeamID; }
 
+public :
+	UFUNCTION()
+		void OnStateTypeChanged(EEnemyStateType InPrevType, EEnemyStateType InNewType);
+
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		UWidgetComponent* NameTagWidget;
 
 	UPROPERTY(VisibleDefaultsOnly)
 		UWidgetComponent* HPWidget;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class USoundBase* HitSound;
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly)

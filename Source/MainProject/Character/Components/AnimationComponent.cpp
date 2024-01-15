@@ -92,6 +92,11 @@ void UAnimationComponent::Dive_Left()
 	PlayAnimMontage(EStateType::Dive_Left);
 }
 
+void UAnimationComponent::Hitted()
+{
+	PlayAnimMontage(EStateType::Hitted);
+}
+
 
 void UAnimationComponent::PlayAnimation(EStateType InState)
 {

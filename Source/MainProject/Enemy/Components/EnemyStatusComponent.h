@@ -37,6 +37,8 @@ public :
 
 	FORCEINLINE bool GetIsHitted() { return bIsHitted; }
 	FORCEINLINE void SetIsHitted(bool InHit) { bIsHitted = InHit; }
+	FORCEINLINE bool GetIsDead() { return bIsDead; }
+	FORCEINLINE void SetIsDead(bool InDead) { bIsDead = InDead; }
 
 
 public :
@@ -63,5 +65,6 @@ private :
 private :
 	float HealthPoint;
 	bool bIsHitted;
+	bool bIsDead;
 
 };

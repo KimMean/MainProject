@@ -11,6 +11,7 @@
 
 ASploder::ASploder()
 {
+	Tags.Add("Sploder");
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(L"SkeletalMesh'/Game/CityofBrass_Enemies/Meshes/Enemy/Sploder/Sploder_Mesh.Sploder_Mesh'");
 	GetMesh()->SetSkeletalMesh(mesh.Object);
 
@@ -20,6 +21,11 @@ ASploder::ASploder()
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> particle(L"ParticleSystem'/Game/ParagonTwinblast/FX/Particles/Abilities/VortexGrenade/FX/P_TwinBlast_VortexGrenade_ExplodeBallistic.P_TwinBlast_VortexGrenade_ExplodeBallistic'");
 	ImpactParticle = particle.Object;
+
+	ConstructorHelpers::FObjectFinder<USoundBase> sound(L"SoundWave'/Game/Characters/Sound/Wick_Burn.Wick_Burn'");
+	Sound = sound.Object;
+	ConstructorHelpers::FObjectFinder<USoundBase> bomb(L"SoundWave'/Game/Characters/Sound/explosion.explosion'");
+	BombSound = bomb.Object;
 }
 
 void ASploder::BeginPlay()
@@ -65,7 +71,10 @@ float ASploder::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContr
 	State->SetWaitMode();
 
 	if (!GetWorldTimerManager().IsTimerActive(BombTimer))
+	{
 		GetWorldTimerManager().SetTimer(BombTimer, this, &ASploder::BombTimeCountDown, 1.0f, true);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Sound, GetActorLocation(), 5.0f,2.0f);
+	}
 
 	return Damage;
 }
@@ -76,6 +85,7 @@ void ASploder::BombTimeCountDown()
 	if (BombTime <= 0)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, GetTransform());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), BombSound, GetActorLocation());
 		// Æã
 		TArray<AActor*> ignore;
 

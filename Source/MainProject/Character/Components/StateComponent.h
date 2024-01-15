@@ -20,6 +20,7 @@ enum class EStateType : uint8
 	Dive_Backward,
 	Dive_Left,
 	Dive_Right,
+	Hitted,
 	Max
 };
 

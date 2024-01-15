@@ -30,6 +30,9 @@ AFireBall::AFireBall()
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> impact(L"ParticleSystem'/Game/FXVarietyPack/Particles/P_ky_hit2.P_ky_hit2'");
 	ImpactParticle = impact.Object;
+
+	ConstructorHelpers::FObjectFinder<USoundBase> sound(L"SoundWave'/Game/Characters/Sound/smallExplosion.smallExplosion'");
+	Sound = sound.Object;
 }
 
 void AFireBall::BeginPlay()
@@ -45,6 +48,8 @@ void AFireBall::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent
 	if (OtherActor->ActorHasTag("Enemy")) return;
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, GetActorTransform());
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), Sound, GetActorLocation(), 0.5f);
 
 	UGameplayStatics::ApplyDamage(OtherActor, 10, GetOwner()->GetInstigatorController(), this, UDamageType::StaticClass());
 

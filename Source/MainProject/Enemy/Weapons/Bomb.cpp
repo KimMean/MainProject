@@ -30,6 +30,9 @@ ABomb::ABomb()
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> particle(L"ParticleSystem'/Game/FXVarietyPack/Particles/P_ky_explosion.P_ky_explosion'");
 	ImpactParticle = particle.Object;
+
+	ConstructorHelpers::FObjectFinder<USoundBase> sound(L"SoundWave'/Game/Characters/Sound/explosion.explosion'");
+	Sound = sound.Object;
 }
 
 void ABomb::BeginPlay()
@@ -45,6 +48,8 @@ void ABomb::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	if (OtherActor == GetOwner()) return;
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticle, GetActorTransform());
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), Sound, GetActorLocation());
 
 	TArray<AActor*> ignoreActors;
 	ignoreActors.Add(this);

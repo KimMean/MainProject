@@ -27,6 +27,7 @@ void UBTS_Corpse::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory,
 	
 	ACharacter* target = status->GetTarget();
 
+	if (status->GetIsDead()) { state->SetDeathMode(); }
 	if (state->IsWaitMode()) return;
 	if (state->IsActionMode()) return;
 

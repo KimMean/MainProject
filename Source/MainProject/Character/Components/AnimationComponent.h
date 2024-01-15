@@ -50,6 +50,7 @@ public :
 	void Dive_Backward();
 	void Dive_Right();
 	void Dive_Left();
+	void Hitted();
 
 private :
 	void PlayAnimation(EStateType InState);

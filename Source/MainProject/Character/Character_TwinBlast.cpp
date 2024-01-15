@@ -119,6 +119,11 @@ float ACharacter_TwinBlast::TakeDamage(float Damage, FDamageEvent const& DamageE
 	float hpRatio = Status->GetCurHealthPoint() / Status->GetMaxHealthPoint();
 	MainWidget->Set_WBP_HPBar_Percent(hpRatio);
 
+
+	if (Status->GetAttack()) return Damage;
+	if (Status->GetIsAvoid()) return Damage;
+	Animation->Hitted();
+
 	return Damage;
 }
 
@@ -244,6 +249,8 @@ void ACharacter_TwinBlast::OnJump()
 
 void ACharacter_TwinBlast::OnAttack()
 {
+	if (Status->GetIsAvoid()) return;
+
 	switch (Status->GetActionMode())
 	{
 		case EActionMode::NormalMode :
@@ -279,6 +286,9 @@ void ACharacter_TwinBlast::OnSprintMode()
 
 void ACharacter_TwinBlast::OnAvoid()
 {
+	if (Status->GetAttack()) return;
+	if (Status->GetIsAvoid()) return;
+
 	FVector NormalizedVel = GetVelocity().GetSafeNormal2D();
 	float ForwardCosAngle = FVector::DotProduct(GetActorForwardVector(), NormalizedVel);
 	float RightCosAngle = FVector::DotProduct(GetActorRightVector(), NormalizedVel);
@@ -321,6 +331,7 @@ void ACharacter_TwinBlast::OffNormalMode()
 
 void ACharacter_TwinBlast::OnUltimateMode()
 {
+	if (Status->GetIsAvoid()) return;
 	if (Status->GetAttack()) return;
 
 	Status->SetAimMode(true);
@@ -336,6 +347,7 @@ void ACharacter_TwinBlast::OffUltimateMode()
 
 void ACharacter_TwinBlast::OnChargeBlastMode()
 {
+	if (Status->GetIsAvoid()) return;
 	if (Status->GetAttack()) return;
 
 	Animation->Attack_ChargeBlastMode();
@@ -349,6 +361,7 @@ void ACharacter_TwinBlast::OffChargeBlastMode()
 
 void ACharacter_TwinBlast::OnGrenadeMode()
 {
+	if (Status->GetIsAvoid()) return;
 	if (Status->GetAttack()) return;
 
 	Animation->Attack_GrenadeMode();
