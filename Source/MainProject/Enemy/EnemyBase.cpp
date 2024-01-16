@@ -88,8 +88,6 @@ float AEnemyBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 		Status->SetTarget(EventInstigator->GetCharacter());
 	}
 
-	//State->SetIdleMode();
-
 	Status->AdjustHealthPoint(-Damage);
 	Status->SetIsHitted(true);
 

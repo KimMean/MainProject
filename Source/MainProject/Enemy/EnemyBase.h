@@ -76,4 +76,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		uint8 TeamID = 1;
+
+	UPROPERTY(EditAnywhere, Category = "Name")
+		FString NameTag = "Enemy";
 };

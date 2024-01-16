@@ -16,13 +16,15 @@ AWizard::AWizard()
 
 	ConstructorHelpers::FClassFinder<AFireBall> fireBall(L"Blueprint'/Game/Enemies/Weapons/FireBall/BP_FireBall.BP_FireBall_C'");
 	FireBall = fireBall.Class;
+
+	NameTag = "Wizard";
 }
 
 void AWizard::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetNameTag("Wizard");
+	SetNameTag(NameTag);
 	UpdateHealthPoint();
 
 	Cast<AEnemy_AIController>(GetController())->SetSenseConfigSight_SightRadius(800);

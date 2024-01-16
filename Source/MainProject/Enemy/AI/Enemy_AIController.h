@@ -56,7 +56,7 @@ private:
 	UPROPERTY(EditAnywhere)
 		float ActionRange = 150;	// AI 공격 범위
 	UPROPERTY(EditAnywhere)
-		bool bDrawDebug = true;	// 디버깅 여부
+		bool bDrawDebug = false;	// 디버깅 여부
 	UPROPERTY(EditAnywhere)
 		float AdjustCircleHeight = 50;	// 디버깅용 원 높이 조절
 
