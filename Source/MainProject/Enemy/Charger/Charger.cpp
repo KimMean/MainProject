@@ -20,13 +20,15 @@ ACharger::ACharger()
 	
 
 	AIControllerClass = AEnemy_AIController::StaticClass();
+
+	NameTag = "Charger";
 }
 
 void ACharger::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetNameTag("Charger");
+	SetNameTag(NameTag);
 	InitDelegates();
 	UpdateHealthPoint();
 	SetCollisionActive(false);
@@ -58,8 +60,6 @@ float ACharger::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContr
 		case FDamageType::KnockBack:
 		{
 			State->SetHittedMode();
-			// 뒤로 밀려나는 애니메이션
-			// 넉백
 			float power = damageType->GetKnockBackPower();
 			LaunchCharacter(-GetActorForwardVector() * power, false, false);
 			break;

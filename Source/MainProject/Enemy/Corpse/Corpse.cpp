@@ -14,13 +14,14 @@ ACorpse::ACorpse()
 	AIControllerClass = AEnemy_AIController::StaticClass();
 	
 
+	NameTag = "Corpse";
 }
 
 void ACorpse::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetNameTag("Corpse");
+	SetNameTag(NameTag);
 	UpdateHealthPoint(); 
 	EquipmentSword();
 }
@@ -53,8 +54,6 @@ float ACorpse::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 		case FDamageType::KnockBack:
 		{
 			State->SetHittedMode();
-			// 뒤로 밀려나는 애니메이션
-			// 넉백
 			float power = damageType->GetKnockBackPower();
 			LaunchCharacter(-GetActorForwardVector() * power, false, false);
 			break;

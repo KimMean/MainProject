@@ -26,13 +26,15 @@ ASploder::ASploder()
 	Sound = sound.Object;
 	ConstructorHelpers::FObjectFinder<USoundBase> bomb(L"SoundWave'/Game/Characters/Sound/explosion.explosion'");
 	BombSound = bomb.Object;
+
+	NameTag = "Sploder";
 }
 
 void ASploder::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetNameTag("Sploder");
+	SetNameTag(NameTag);
 	UpdateHealthPoint();
 
 	Cast<AEnemy_AIController>(GetController())->SetActionRange(0);

@@ -15,6 +15,6 @@ public :
 	void SetNameTag(FText InName);
 
 protected :
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly , meta = (BindWidget))
 		UTextBlock* NameTag;
 };

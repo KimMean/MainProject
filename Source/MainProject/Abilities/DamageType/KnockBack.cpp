@@ -10,7 +10,5 @@ UKnockBack::UKnockBack()
 
 float UKnockBack::GetKnockBackPower()
 {
-	DebugLog::Print("KnockBack");
-	DebugLog::Print(KnockBackPower);
 	return KnockBackPower;
 }

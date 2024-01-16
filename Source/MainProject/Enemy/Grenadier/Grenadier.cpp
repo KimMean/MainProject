@@ -14,13 +14,15 @@ AGrenadier::AGrenadier()
 
 	ConstructorHelpers::FClassFinder<ABomb> bomb(L"Blueprint'/Game/Enemies/Weapons/Bomb/BP_Bomb.BP_Bomb_C'");
 	Bomb = bomb.Class;
+
+	NameTag = "Grenadier";
 }
 
 void AGrenadier::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetNameTag("Wizard");
+	SetNameTag(NameTag);
 	UpdateHealthPoint();
 
 	Cast<AEnemy_AIController>(GetController())->SetSenseConfigSight_SightRadius(800);
