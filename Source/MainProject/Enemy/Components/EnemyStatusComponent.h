@@ -59,7 +59,7 @@ private :
 	UPROPERTY(EditDefaultsOnly, Category = "Speed")
 		float Speed[(int32)EEnemySpeedType::MAX] = { 200, 400, 600 };
 	
-	UPROPERTY(VisibleDefaultsOnly, Category = "Helth")
+	UPROPERTY(EditAnywhere, Category = "Helth")
 		float MaxHealthPoint = 100;
 
 private :
