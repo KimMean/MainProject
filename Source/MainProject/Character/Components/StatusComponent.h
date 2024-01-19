@@ -69,7 +69,7 @@ public:
 
 private :
 	UPROPERTY(VisibleDefaultsOnly, Category = "SpringArm")
-		float BaseArmLength = 300.0f;
+		float BaseArmLength = 200.0f;
 	UPROPERTY(VisibleDefaultsOnly, Category = "SpringArm")
 		float AimModeArmLength = 100.0f;
 

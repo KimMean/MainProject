@@ -96,6 +96,7 @@ float AEnemyBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 	if (Status->GetHealthPoint() <= 0)
 	{
 		State->SetDeathMode();
+		Status->SetIsDead(true);
 		Animation->Death();
 	}
 

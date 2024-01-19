@@ -59,6 +59,8 @@ void UEnemyStateComponent::SetDeathMode()
 
 void UEnemyStateComponent::ChangeType(EEnemyStateType InType)
 {
+	if (Type == EEnemyStateType::Death) return; 
+
 	EEnemyStateType type = Type;
 	Type = InType;
 

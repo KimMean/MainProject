@@ -4,6 +4,8 @@
 #include "Gameframework/Character.h"
 #include "Components/CapsuleComponent.h"
 
+#include "Utilities/DebugLog.h"
+
 UInverseKinematicsComponent::UInverseKinematicsComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -34,8 +36,8 @@ void UInverseKinematicsComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	// 이동 보간
 	//Data.LeftDistance.Z = UKismetMathLibrary::FInterpTo(Data.LeftDistance.Z, (leftDistance - offset), DeltaTime, InterpSpeed);
 	//Data.RightDistance.Z = UKismetMathLibrary::FInterpTo(Data.RightDistance.Z, -(rightDistance - offset), DeltaTime, InterpSpeed);
+
 	Data.LeftDistance.Z = UKismetMathLibrary::FInterpTo(Data.LeftDistance.Z, leftDistance, DeltaTime, InterpSpeed);
-	// 대칭이기 때문에 -로 바꿔야함
 	Data.RightDistance.Z = UKismetMathLibrary::FInterpTo(Data.RightDistance.Z, rightDistance, DeltaTime, InterpSpeed);
 
 	Data.LeftRotation = UKismetMathLibrary::RInterpTo(Data.LeftRotation, leftRotation, DeltaTime, InterpSpeed);
@@ -70,9 +72,10 @@ void UInverseKinematicsComponent::Trace(FName InSocket, float& OutDistance, FRot
 	OutDistance = length - TraceDistance;
 
 	// 수직벡터, 이를 통해 롤, 피치 회전을 얻을 것
+	
 	FVector normal = hitResult.ImpactNormal;
-	float roll = UKismetMathLibrary::DegAtan2(normal.X, normal.Z);
-	float pitch = -UKismetMathLibrary::DegAtan2(normal.Y, normal.Z);
+	float roll = -UKismetMathLibrary::DegAtan2(normal.Y, normal.Z);
+	float pitch = UKismetMathLibrary::DegAtan2(normal.X, normal.Z);
 
 	OutRotation = FRotator(pitch, 0.0f, roll);
 }
